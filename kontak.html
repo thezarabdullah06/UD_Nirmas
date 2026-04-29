@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="id" class="antialiased">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Hubungi Kami | UD NIMARS - Premium B2B Fresh Partner</title>
+  <meta name="description" content="Hubungi tim representatif UD NIMARS untuk penawaran pasokan sayur dan buah segar B2B dengan standar kualitas premium." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              green: '#2D5A27',
+              orange: '#F2994A',
+              cta: '#E67E22',
+              dark: '#1D1D1F',
+              light: '#FBFBFD',
+              border: '#E5E5EA',
+            },
+          },
+          fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif'],
+          },
+          boxShadow: {
+            'apple': '0 20px 40px -10px rgba(0, 0, 0, 0.08)',
+            'apple-hover': '0 30px 60px -15px rgba(0, 0, 0, 0.12)',
+            'glow': '0 10px 30px -10px rgba(230,126,34,0.4)',
+          }
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ── 1. Fundamentals & Reset ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: auto; font-size: 16px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #1D1D1F;
+      background-color: #FBFBFD;
+      overflow-x: hidden;
+      cursor: none; /* Hide default cursor for custom implementation */
+    }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; letter-spacing: -0.02em; }
+    
+    /* ── 2. Custom Cursor ── */
+    #cursor-dot {
+      position: fixed; top: 0; left: 0; width: 6px; height: 6px;
+      background-color: #2D5A27; border-radius: 50%;
+      pointer-events: none; z-index: 999999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.3s;
+    }
+    #cursor-outline {
+      position: fixed; top: 0; left: 0; width: 44px; height: 44px;
+      border: 1px solid rgba(45, 90, 39, 0.5); border-radius: 50%;
+      pointer-events: none; z-index: 999998;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s;
+    }
+    .cursor-hover #cursor-outline { width: 72px; height: 72px; border-color: #F2994A; background: rgba(242,153,74,0.05); }
+    .cursor-hover #cursor-dot { background-color: #F2994A; transform: translate(-50%, -50%) scale(1.5); }
+
+    /* ── 3. FLOATING CAPSULE HEADER (GLOBAL) ── */
+    #floating-header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 95%;
+      max-width: 1400px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #floating-header.scrolled {
+      top: 16px;
+      box-shadow: 0 15px 40px rgba(45, 90, 39, 0.12);
+    }
+    .header-left { display: flex; align-items: center; flex: 1; justify-content: flex-end; padding-right: 2rem; }
+    .header-center { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .header-right { display: flex; align-items: center; flex: 1; justify-content: flex-start; padding-left: 2rem; }
+    .nav-links-container { display: flex; align-items: center; gap: 2.5rem; }
+    .logo-container { display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease; cursor: none; }
+    .logo-container:hover { transform: scale(1.1); }
+    .nav-link { 
+      font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; color: #0e2a0b; 
+      text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; position: relative; padding: 8px 0; transition: color 0.3s ease; cursor: none; 
+    }
+    .nav-link::after { 
+      content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px; 
+      background: #F2994A; transform: translateX(-50%); transition: width 0.3s ease; border-radius: 2px; 
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #F2994A !important; }
+    @media (max-width: 1024px) {
+      #floating-header { width: 95%; padding: 10px 20px; }
+      .hidden-mobile { display: none !important; }
+      .header-left, .header-right { padding: 0; justify-content: flex-end; flex: unset;}
+      .header-center { flex: 1; justify-content: flex-start; }
+      .mobile-menu-btn { display: flex !important; color: #0e2a0b !important; cursor: none;}
+    }
+
+    /* ── 4. Form Architecture & Cards ── */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid #FFFFFF;
+    }
+    .input-wrapper { position: relative; margin-bottom: 1.5rem; }
+    .form-field {
+      width: 100%; padding: 1.4rem 1rem 0.6rem 3rem;
+      border: 1.5px solid #E5E5EA; border-radius: 1rem;
+      background: #FAFAFA;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem; color: #1D1D1F;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      appearance: none;
+    }
+    .form-field:focus { 
+      border-color: #2D5A27; background: #FFFFFF; 
+      box-shadow: 0 0 0 4px rgba(45,90,39,0.1); outline: none; 
+    }
+    .form-label {
+      position: absolute; left: 3rem; top: 1.1rem;
+      font-size: 0.95rem; color: #86868B;
+      pointer-events: none; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .form-field:focus ~ .form-label,
+    .form-field:not(:placeholder-shown) ~ .form-label {
+      top: 0.4rem; font-size: 0.7rem; font-weight: 600; color: #2D5A27;
+    }
+    select.form-field {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2386868B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 1.2rem center;
+    }
+
+    /* ── 5. Micro-interactions ── */
+    .btn-haptic { transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; cursor: none; }
+    .btn-haptic:active { transform: scale(0.95) !important; }
+    .magnetic-wrap { display: inline-block; position: relative; }
+    .magnetic-inner { display: inline-block; will-change: transform; pointer-events: none; }
+    .tilt-card { transform-style: preserve-3d; perspective: 1200px; will-change: transform; }
+    .tilt-inner { transition: transform 0.4s ease, box-shadow 0.4s ease; transform: translateZ(20px); }
+    .tilt-card:hover .tilt-inner { box-shadow: var(--tw-shadow-apple-hover); }
+
+    /* ── 6. Marquee & Animations ── */
+    .marquee-track { display: flex; width: max-content; animation: scrollMarquee 40s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes scrollMarquee { to { transform: translateX(-50%); } }
+
+    .reveal { opacity: 0; transform: translateY(60px); will-change: opacity, transform; }
+    
+    .float-el { animation: floatEl 8s ease-in-out infinite; }
+    .float-el.delay-1 { animation-delay: -3s; animation-duration: 9s; }
+    @keyframes floatEl {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-15px) rotate(4deg); }
+      66% { transform: translateY(10px) rotate(-3deg); }
+    }
+
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 4px;
+      background: linear-gradient(90deg, #2D5A27, #F2994A);
+      z-index: 99999; width: 0%; transition: width 0.1s;
+    }
+
+    /* ── 7. Preloader & Toast ── */
+    #preloader {
+      position: fixed; inset: 0; background: #FBFBFD; z-index: 9999999;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    .loader-circle { 
+      width: 40px; height: 40px; border: 3px solid rgba(45,90,39,0.1); 
+      border-top-color: #2D5A27; border-radius: 50%; animation: spin 1s linear infinite; 
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #toast { transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(150px) scale(0.9); opacity: 0; }
+    #toast.show { transform: translateY(0) scale(1); opacity: 1; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #FBFBFD; }
+    ::-webkit-scrollbar-thumb { background: #2D5A27; border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<div id="preloader"><div class="loader-circle"></div></div>
+<div id="scroll-progress"></div>
+
+<div id="cursor-dot"></div>
+<div id="cursor-outline"></div>
+
+<nav id="floating-header" class="hover-target">
+  <div class="header-left">
+    <div class="nav-links-container hidden-mobile">
+      <a href="about.html" class="nav-link hover-target">Tentang Kami</a>
+      <a href="produk.html" class="nav-link hover-target">Produk</a>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <a href="index.html" class="logo-container hover-target" title="Beranda UD NIMARS">
+      <svg width="52" height="52" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 5C25.147 5 5 25.147 5 50C5 74.853 25.147 95 50 95C74.853 95 95 74.853 95 50C95 25.147 74.853 5 50 5Z" fill="#2D5A27"/>
+        <path d="M95 50C95 25.147 74.853 5 50 5V95C74.853 95 95 74.853 95 50Z" fill="#1A3317"/>
+        <path d="M50 85V40" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+        <path d="M50 65C35 65 25 50 25 50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+        <path d="M50 55C65 55 75 40 75 40" stroke="#F2994A" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="50" cy="25" r="8" fill="#F2994A"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="header-right">
+    <div class="nav-links-container hidden-mobile">
+      <a href="team.html" class="nav-link hover-target">Tim Kami</a>
+      <a href="kontak.html" class="nav-link hover-target" style="color: #F2994A;">Kontak Kami</a>
+    </div>
+    <button class="mobile-menu-btn hidden items-center justify-center p-2 text-[#0e2a0b] hover-target" id="menu-toggle">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+  </div>
+</nav>
+
+<div id="mobile-menu" class="fixed inset-0 bg-[#0e2a0b]/95 z-[200] hidden flex-col items-center justify-center gap-8 backdrop-blur-2xl">
+  <a href="index.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors hover-target">Home</a>
+  <a href="about.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors hover-target">Tentang Kami</a>
+  <a href="produk.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors hover-target">Produk</a>
+  <a href="team.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors hover-target">Tim Kami</a>
+  <a href="kontak.html" class="text-[#F2994A] text-3xl font-display font-black transition-colors hover-target">Kontak Kami</a>
+  
+  <button id="close-mobile" class="mt-10 p-4 text-white/50 hover:text-[#F2994A] bg-white/5 rounded-full border border-white/10 hover-target">
+    <i data-lucide="x" class="w-8 h-8"></i>
+  </button>
+</div>
+
+<section class="relative pt-36 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-brand-light">
+  <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-brand-green/5 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-brand-orange/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+  <div class="float-el absolute top-1/4 right-[15%] opacity-40 text-brand-orange hidden lg:block">
+    <svg width="120" height="120" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="1.5" fill="none" stroke-dasharray="8 8"/></svg>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8 z-10 text-center">
+    
+    <div class="reveal inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full mb-8 shadow-sm">
+      <span class="w-2 h-2 bg-brand-green rounded-full animate-pulse"></span>
+      Tim Sales Aktif — Respons < 2 Jam
+    </div>
+
+    <h1 class="reveal font-montserrat font-black text-brand-dark text-4xl sm:text-5xl lg:text-[4.5rem] leading-[1.1] tracking-tight max-w-4xl mx-auto mb-8">
+      Optimalkan Rantai Pasok <br class="hidden md:block"/>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-emerald-500">Bisnis Anda</span> Hari Ini.
+    </h1>
+
+    <p class="reveal font-light text-gray-500 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto mb-16">
+      Tim representatif kami siap merancang penawaran spesifik yang menyesuaikan <strong class="font-semibold text-gray-800">volume dan standar kualitas</strong> dapur premium Anda secara presisi.
+    </p>
+
+    <div class="reveal flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-green/10 rounded-full flex items-center justify-center"><i data-lucide="shield-check" class="w-5 h-5 text-brand-green"></i></div>
+        <span class="font-inter text-sm font-medium text-gray-600">Sertifikasi Halal & HACCP</span>
+      </div>
+      <div class="hidden sm:block w-px h-6 bg-gray-300"></div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-orange/10 rounded-full flex items-center justify-center"><i data-lucide="truck" class="w-5 h-5 text-brand-orange"></i></div>
+        <span class="font-inter text-sm font-medium text-gray-600">Pengiriman Jabodetabek</span>
+      </div>
+      <div class="hidden sm:block w-px h-6 bg-gray-300"></div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-green/10 rounded-full flex items-center justify-center"><i data-lucide="users" class="w-5 h-5 text-brand-green"></i></div>
+        <span class="font-inter text-sm font-medium text-gray-600">50+ Mitra Bisnis</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+    <div class="lg:col-span-7 reveal">
+      
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 bg-brand-dark rounded-2xl flex items-center justify-center shadow-lg">
+          <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h2 class="font-montserrat font-bold text-gray-900 text-xl md:text-2xl">Request Quotation B2B</h2>
+          <p class="font-inter text-sm text-gray-500 mt-1">Lengkapi data terenkripsi di bawah ini.</p>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-[2rem] shadow-apple p-8 sm:p-10 border border-gray-100 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gray-100"><div class="h-full bg-brand-green w-1/3"></div></div>
+
+        <form id="contact-form" onsubmit="handleFormSubmit(event)" novalidate class="mt-4">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+            <div class="input-wrapper group">
+              <i data-lucide="user" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+              <input type="text" id="nama" placeholder=" " required class="form-field hover-target" />
+              <label for="nama" class="form-label">Nama Lengkap *</label>
+              <p class="error-msg hidden text-xs text-red-500 mt-1.5 ml-2 font-medium">Nama wajib diisi.</p>
+            </div>
+            <div class="input-wrapper group">
+              <i data-lucide="building-2" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+              <input type="text" id="perusahaan" placeholder=" " required class="form-field hover-target" />
+              <label for="perusahaan" class="form-label">Nama Perusahaan *</label>
+              <p class="error-msg hidden text-xs text-red-500 mt-1.5 ml-2 font-medium">Perusahaan wajib diisi.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+            <div class="input-wrapper group">
+              <i data-lucide="mail" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+              <input type="email" id="email" placeholder=" " required class="form-field hover-target" />
+              <label for="email" class="form-label">Email Korporat *</label>
+              <p class="error-msg hidden text-xs text-red-500 mt-1.5 ml-2 font-medium">Email valid wajib diisi.</p>
+            </div>
+            <div class="input-wrapper group">
+              <i data-lucide="smartphone" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+              <input type="tel" id="whatsapp" placeholder=" " required class="form-field hover-target" />
+              <label for="whatsapp" class="form-label">No. WhatsApp *</label>
+              <p class="error-msg hidden text-xs text-red-500 mt-1.5 ml-2 font-medium">Nomor WhatsApp wajib diisi.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+            <div class="input-wrapper group">
+              <i data-lucide="briefcase" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+              <select id="industri" required class="form-field hover-target cursor-none">
+                <option value="" disabled selected></option>
+                <option value="restoran">Restoran / F&B</option>
+                <option value="hotel">Hotel / Resort</option>
+                <option value="supermarket">Supermarket Retail</option>
+                <option value="katering">Institutional Catering</option>
+              </select>
+              <label for="industri" class="form-label">Kategori Industri *</label>
+              <p class="error-msg hidden text-xs text-red-500 mt-1.5 ml-2 font-medium">Pilih bidang industri.</p>
+            </div>
+            <div class="input-wrapper group">
+              <i data-lucide="bar-chart-2" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+              <select id="volume" required class="form-field hover-target cursor-none">
+                <option value="" disabled selected></option>
+                <option value="harian">Supply Harian</option>
+                <option value="mingguan">Supply Mingguan</option>
+                <option value="insidental">Proyek Insidental</option>
+              </select>
+              <label for="volume" class="form-label">Frekuensi Kebutuhan *</label>
+              <p class="error-msg hidden text-xs text-red-500 mt-1.5 ml-2 font-medium">Pilih frekuensi.</p>
+            </div>
+          </div>
+
+          <div class="input-wrapper group mt-2">
+            <i data-lucide="message-square" class="absolute left-5 top-5 w-5 h-5 text-gray-400 group-focus-within:text-brand-green transition-colors z-10"></i>
+            <textarea id="pesan" rows="4" placeholder=" " class="form-field hover-target resize-none pt-4"></textarea>
+            <label for="pesan" class="form-label !top-4">Spesifikasi & Detail Kebutuhan (Opsional)</label>
+          </div>
+
+          <div class="flex items-start gap-3 p-5 bg-gray-50 rounded-xl border border-gray-100 mb-8 transition-colors" id="checkbox-wrap">
+            <input type="checkbox" id="setuju" class="mt-1 w-4 h-4 text-brand-green bg-white border-gray-300 rounded hover-target cursor-none flex-shrink-0" required>
+            <label for="setuju" class="text-sm text-gray-500 hover-target cursor-none leading-relaxed">
+              Saya menyetujui data ini digunakan tim UD NIMARS untuk keperluan penawaran komersial dan tidak dibagikan ke pihak ketiga (Enkripsi SSL).
+            </label>
+          </div>
+
+          <div class="magnetic-wrap w-full">
+            <button type="submit" id="submit-btn" class="magnetic-inner btn-haptic hover-target w-full bg-brand-cta hover:bg-[#d6711c] text-white font-montserrat font-bold text-lg py-5 px-8 rounded-2xl shadow-glow flex items-center justify-center gap-3 relative overflow-hidden">
+              <span class="flex items-center gap-2 z-10" id="btn-text">
+                Kirim Request Quotation <i data-lucide="send" class="w-5 h-5"></i>
+              </span>
+              <svg id="btn-spinner" class="hidden animate-spin w-6 h-6 text-white absolute z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 space-y-8 mt-12 lg:mt-0 reveal delay-1">
+
+      <div class="tilt-card hover-target">
+        <div class="tilt-inner glass-card rounded-[2rem] shadow-apple p-8 sm:p-10 border border-gray-100 bg-white">
+          <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+            <div class="w-12 h-12 rounded-2xl bg-brand-orange/10 flex items-center justify-center"><i data-lucide="map-pin" class="w-6 h-6 text-brand-orange"></i></div>
+            <div>
+              <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Temukan Kami</p>
+              <h3 class="font-montserrat font-bold text-xl text-gray-900">Informasi Kontak</h3>
+            </div>
+          </div>
+          
+          <div class="space-y-6">
+            <div class="flex gap-4 group">
+              <div class="w-10 h-10 bg-brand-green/5 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-brand-green/15 transition-colors"><i data-lucide="building" class="w-5 h-5 text-brand-green"></i></div>
+              <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Kantor & Gudang</p>
+                <p class="text-sm text-gray-700 leading-relaxed">Jl. Raya Pasar Induk No. 88, Blok B-12<br/>Kramat Jati, Jakarta Timur 13510</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4 group">
+              <div class="w-10 h-10 bg-[#25D366]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors relative">
+                <span class="absolute inset-0 rounded-xl border border-[#25D366] animate-ping opacity-20"></span>
+                <i data-lucide="message-circle" class="w-5 h-5 text-[#25D366]"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">WhatsApp Bisnis</p>
+                <a href="https://wa.me/6281234567890" target="_blank" class="text-base font-semibold text-gray-900 hover:text-brand-green transition-colors hover-target inline-flex items-center gap-2">
+                  +62 812-3456-7890 <i data-lucide="external-link" class="w-3.5 h-3.5 text-gray-400"></i>
+                </a>
+              </div>
+            </div>
+            
+            <div class="flex gap-4 group">
+              <div class="w-10 h-10 bg-brand-green/5 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-brand-green/15 transition-colors"><i data-lucide="mail" class="w-5 h-5 text-brand-green"></i></div>
+              <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Email Profesional</p>
+                <a href="mailto:sales@udnimars.com" class="text-base font-semibold text-gray-900 hover:text-brand-green transition-colors hover-target">sales@udnimars.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tilt-card hover-target reveal delay-2">
+        <div class="tilt-inner bg-gradient-to-br from-brand-dark to-[#1f3d1b] rounded-[2rem] shadow-apple p-8 sm:p-10 text-white relative overflow-hidden">
+          <div class="absolute -right-10 -top-10 opacity-10"><i data-lucide="award" class="w-40 h-40"></i></div>
+          
+          <h3 class="font-montserrat font-bold text-xl mb-2 relative z-10">Sertifikasi & Standar Kualitas</h3>
+          <p class="text-white/70 text-sm leading-relaxed mb-6 relative z-10">Dipercaya oleh 50+ jaringan resto di Jabodetabek. Komoditas disortir via QC ketat.</p>
+          
+          <div class="flex flex-wrap gap-3 relative z-10">
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl">
+              <i data-lucide="check-circle" class="w-4 h-4 text-brand-orange"></i>
+              <span class="text-xs font-bold tracking-widest uppercase">Halal MUI</span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl">
+              <i data-lucide="shield-check" class="w-4 h-4 text-brand-orange"></i>
+              <span class="text-xs font-bold tracking-widest uppercase">HACCP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-4 reveal delay-2">
+        <a href="#" class="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-[#E1306C] hover:border-[#E1306C] hover:shadow-md transition-all hover-target"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+        <a href="#" class="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-[#1877F2] hover:border-[#1877F2] hover:shadow-md transition-all hover-target"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+        <a href="#" class="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 hover:border-gray-900 hover:shadow-md transition-all hover-target"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="py-12 border-y border-gray-200 bg-white reveal">
+  <div class="max-w-7xl mx-auto px-6 mb-8 text-center">
+    <p class="font-bold text-xs tracking-[0.25em] text-gray-400 uppercase">Mitra Jaringan Kuliner Premium</p>
+  </div>
+  <div class="marquee-wrapper relative overflow-hidden w-full">
+    <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+    
+    <div class="marquee-track flex items-center">
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="hotel" class="w-8 h-8 text-brand-green"></i> GRAND HYATT</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="utensils" class="w-8 h-8 text-brand-orange"></i> ISMAYA GROUP</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="shopping-cart" class="w-8 h-8 text-brand-green"></i> RANCH MARKET</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="building" class="w-8 h-8 text-brand-orange"></i> ALILA HOTELS</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="hotel" class="w-8 h-8 text-brand-green"></i> GRAND HYATT</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="utensils" class="w-8 h-8 text-brand-orange"></i> ISMAYA GROUP</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="shopping-cart" class="w-8 h-8 text-brand-green"></i> RANCH MARKET</div>
+      <div class="mx-12 flex items-center gap-3 text-gray-400 font-montserrat font-bold text-xl opacity-60 hover:opacity-100 transition-opacity"><i data-lucide="building" class="w-8 h-8 text-brand-orange"></i> ALILA HOTELS</div>
+    </div>
+  </div>
+</section>
+
+<section class="py-24 lg:py-32 max-w-4xl mx-auto px-6">
+  <div class="text-center mb-16 reveal">
+    <div class="inline-flex items-center gap-2 bg-brand-green/10 text-brand-green text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">
+      <i data-lucide="help-circle" class="w-4 h-4"></i> FAQ
+    </div>
+    <h2 class="font-montserrat font-black text-3xl md:text-4xl tracking-tight text-gray-900 mb-4">Pertanyaan Seputar Kemitraan</h2>
+    <p class="text-gray-500 text-lg">Informasi operasional teknis untuk tim Procurement Anda.</p>
+  </div>
+
+  <div class="space-y-4 reveal">
+    <div class="glass-card rounded-2xl overflow-hidden hover-target border border-gray-200 transition-colors faq-wrapper">
+      <button class="faq-btn w-full px-8 py-6 text-left flex items-center justify-between font-montserrat font-bold text-gray-900 bg-transparent cursor-none">
+        Berapa Minimum Order Quantity (MOQ)?
+        <i data-lucide="plus" class="faq-icon w-5 h-5 text-brand-green transition-transform duration-300 flex-shrink-0"></i>
+      </button>
+      <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-gray-50/80">
+        <p class="px-8 pb-6 text-gray-600 leading-relaxed text-sm">
+          MOQ operasional bervariasi bergantung komoditas. Untuk radius Jabodetabek, kami mengakomodasi pengiriman mulai dari 50 Kg per jadwal gabungan. Hubungi sales untuk custom SLA.
+        </p>
+      </div>
+    </div>
+    <div class="glass-card rounded-2xl overflow-hidden hover-target border border-gray-200 transition-colors faq-wrapper">
+      <button class="faq-btn w-full px-8 py-6 text-left flex items-center justify-between font-montserrat font-bold text-gray-900 bg-transparent cursor-none">
+        Bagaimana kebijakan Replacement Guarantee?
+        <i data-lucide="plus" class="faq-icon w-5 h-5 text-brand-green transition-transform duration-300 flex-shrink-0"></i>
+      </button>
+      <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-gray-50/80">
+        <p class="px-8 pb-6 text-gray-600 leading-relaxed text-sm">
+          Jika tim receiving Anda menemukan defect fisik atau ketidaksesuaian spesifikasi, kami akan langsung memproses penggantian barang (retur) secara gratis pada jadwal pengiriman terdekat (H+1) tanpa prosedur birokrasi berbelit.
+        </p>
+      </div>
+    </div>
+    <div class="glass-card rounded-2xl overflow-hidden hover-target border border-gray-200 transition-colors faq-wrapper">
+      <button class="faq-btn w-full px-8 py-6 text-left flex items-center justify-between font-montserrat font-bold text-gray-900 bg-transparent cursor-none">
+        Apakah menyediakan skema Term of Payment (TOP)?
+        <i data-lucide="plus" class="faq-icon w-5 h-5 text-brand-green transition-transform duration-300 flex-shrink-0"></i>
+      </button>
+      <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-gray-50/80">
+        <p class="px-8 pb-6 text-gray-600 leading-relaxed text-sm">
+          Tentu. Untuk klien korporasi dengan komitmen Purchase Agreement berdurasi minimum 6 bulan, kami sanggup memfasilitasi TOP mulai 14 hingga 30 hari kerja efektif setelah invoice diterbitkan.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-6 pb-24 reveal">
+  <div class="bg-brand-green rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-apple">
+    <div class="absolute -top-40 -right-40 w-[500px] h-[500px] bg-brand-orange/30 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute -bottom-40 -left-40 w-[400px] h-[400px] bg-white/20 rounded-full blur-[100px] pointer-events-none"></div>
+    
+    <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/20">
+      <i data-lucide="zap" class="w-8 h-8 text-brand-orange"></i>
+    </div>
+
+    <h2 class="relative z-10 font-montserrat font-black text-white text-3xl md:text-5xl mb-6 tracking-tight">Siap Memulai Kemitraan?</h2>
+    <p class="relative z-10 text-white/80 text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed">Hubungi via WhatsApp untuk respon instan atau jadwalkan kunjungan langsung ke fasilitas penyimpanan *cold-chain* kami.</p>
+    
+    <div class="relative z-10 flex flex-col sm:flex-row justify-center gap-6">
+      <div class="magnetic-wrap">
+        <a href="https://wa.me/6281234567890" target="_blank" class="magnetic-inner btn-haptic hover-target flex items-center justify-center gap-3 bg-[#25D366] text-white font-bold px-10 py-5 rounded-full shadow-[0_15px_30px_rgba(37,211,102,0.3)] hover:bg-[#1ebd5b]">
+          <i data-lucide="message-circle" class="w-5 h-5"></i> Chat WhatsApp Cepat
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-[#020617] text-white pt-24 pb-12 border-t-8 border-[#2D5A27]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-14 mb-20">
+      
+      <div class="lg:col-span-4 pr-6">
+        <div class="flex items-center gap-4 mb-8 hover-target">
+          <div class="w-12 h-12 rounded-2xl bg-[#2D5A27] flex items-center justify-center border border-white/10">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
+          <span class="font-display font-black text-2xl tracking-wide">UD NIMARS</span>
+        </div>
+        <p class="text-gray-400 text-base leading-relaxed mb-8">
+          Infrastruktur pasokan segar premium B2B terintegrasi tingkat tinggi. Menghubungkan potensi ladang agrikultur nusantara dengan eksekutif kuliner di seluruh Indonesia.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="hover-target w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" class="hover-target w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="hover-target w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 lg:col-start-6">
+        <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Pintas</h4>
+        <ul class="space-y-4">
+          <li><a href="about.html" class="hover-target text-gray-400 hover:text-white text-base transition-colors">Tentang Kami</a></li>
+          <li><a href="produk.html" class="hover-target text-gray-400 hover:text-white text-base transition-colors">Produk</a></li>
+          <li><a href="team.html" class="hover-target text-gray-400 hover:text-white text-base transition-colors">Tim Kami</a></li>
+          <li><a href="kontak.html" class="hover-target text-gray-400 hover:text-white text-base transition-colors">Kontak Kami</a></li>
+        </ul>
+      </div>
+
+      <div class="lg:col-span-4">
+        <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Katalog & Insight</h4>
+        <p class="text-gray-400 text-base mb-6 leading-relaxed">Dapatkan update pergerakan tren harga komoditas dan *price list* bulanan langsung ke email dashboard procurement Anda.</p>
+        <div class="flex h-14">
+          <input type="email" placeholder="Email Corporate Address" class="hover-target bg-white/5 border border-white/20 border-r-0 rounded-l-2xl px-6 w-full text-base outline-none focus:border-[#F2994A] text-white placeholder-gray-500 transition-colors cursor-none">
+          <button class="hover-target bg-[#F2994A] hover:bg-orange-600 px-8 rounded-r-2xl font-bold text-base transition-colors cursor-none">Subscribe</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500">
+      <p>&copy; 2026 UD NIMARS. All rights reserved.</p>
+      <div class="flex gap-8">
+        <a href="#" class="hover-target hover:text-white transition-colors">Privacy Policy</a>
+        <a href="#" class="hover-target hover:text-white transition-colors">Terms of Service</a>
+        <a href="#" class="hover-target hover:text-white transition-colors">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="fixed bottom-10 right-10 z-[9999] flex items-center gap-4 bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-5 shadow-apple pointer-events-none">
+  <div class="w-12 h-12 rounded-full bg-brand-green/10 flex items-center justify-center flex-shrink-0">
+    <i data-lucide="check" class="w-6 h-6 text-brand-green"></i>
+  </div>
+  <div>
+    <h4 class="font-montserrat font-bold text-sm text-gray-900">Quotation Terkirim!</h4>
+    <p class="text-xs text-gray-500 mt-1 font-medium">Tim kami akan membalas via Email / WA.</p>
+  </div>
+</div>
+
+<script>
+  // ── 1. Init Icons ──
+  lucide.createIcons();
+
+  // ── 2. Preloader Logic ──
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    preloader.style.opacity = '0';
+    setTimeout(() => {
+      preloader.style.visibility = 'hidden';
+      ScrollTrigger.refresh(); 
+    }, 600);
+  });
+
+  // ── 3. Lenis Smooth Scroll (Fluidity) ──
+  const lenis = new Lenis({
+    duration: 1.4,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smooth: true,
+  });
+  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+
+  // ── 4. Custom Cursor (Lerp) ──
+  const dot = document.getElementById('cursor-dot');
+  const outline = document.getElementById('cursor-outline');
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let outX = mouseX, outY = mouseY;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
+  });
+
+  gsap.ticker.add(() => {
+    outX += (mouseX - outX) * 0.15;
+    outY += (mouseY - outY) * 0.15;
+    outline.style.left = outX + 'px';
+    outline.style.top = outY + 'px';
+  });
+
+  document.querySelectorAll('.hover-target, a, button, input, textarea, select').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  // ── 5. Magnetic CTA Button ──
+  document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+    const inner = wrap.querySelector('.magnetic-inner');
+    if(!inner) return;
+    wrap.addEventListener('mousemove', e => {
+      const rect = wrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) * 0.3;
+      const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
+      gsap.to(inner, { x: x, y: y, duration: 0.4, ease: "power2.out" });
+    });
+    wrap.addEventListener('mouseleave', () => {
+      gsap.to(inner, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
+    });
+  });
+
+  // ── 6. 3D Tilt Hover Effect ──
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    const inner = card.querySelector('.tilt-inner');
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+      const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+      gsap.to(card, { rotateY: x * 6, rotateX: -y * 6, duration: 0.4, ease: "power1.out" });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.7, ease: "power2.out" });
+    });
+  });
+
+  // ── 7. GSAP Scroll Reveal ──
+  gsap.registerPlugin(ScrollTrigger);
+  
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.fromTo(el, 
+      { y: 60, opacity: 0 }, 
+      { 
+        y: 0, opacity: 1, duration: 1.2, ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" }
+      }
+    );
+  });
+
+  // ── 8. Global Header Scroll & Menu Toggle ──
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('scroll-progress').style.width = `${(scrolled / total) * 100}%`;
+
+    const header = document.getElementById('floating-header');
+    if (window.scrollY > 80) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+
+  document.getElementById('menu-toggle').addEventListener('click', () => {
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenu.classList.remove('hidden'); 
+    mobileMenu.classList.add('flex');
+    gsap.fromTo(mobileMenu, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+    lenis.stop(); 
+  });
+
+  document.getElementById('close-mobile').addEventListener('click', () => {
+    const mobileMenu = document.getElementById('mobile-menu');
+    gsap.to(mobileMenu, { opacity: 0, duration: 0.3, onComplete: () => {
+      mobileMenu.classList.add('hidden'); 
+      mobileMenu.classList.remove('flex');
+    }});
+    lenis.start(); 
+  });
+
+  // ── 9. FAQ Accordion Logic ──
+  document.querySelectorAll('.faq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrapper = btn.parentElement;
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector('.faq-icon');
+      const isOpen = content.style.maxHeight;
+
+      document.querySelectorAll('.faq-content').forEach(c => c.style.maxHeight = null);
+      document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+      document.querySelectorAll('.faq-wrapper').forEach(w => w.classList.remove('border-brand-green'));
+
+      if (!isOpen) {
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.style.transform = 'rotate(45deg)';
+        wrapper.classList.add('border-brand-green');
+      }
+    });
+  });
+
+  // ── 10. Form Validation & Modular Submission ──
+  function showError(input, message) {
+    input.style.borderColor = '#EF4444';
+    const err = input.parentElement.querySelector('.error-msg');
+    if(err) { err.textContent = message; err.classList.remove('hidden'); }
+  }
+
+  function clearError(input) {
+    input.style.borderColor = '';
+    const err = input.parentElement.querySelector('.error-msg');
+    if(err) err.classList.add('hidden');
+  }
+
+  function validateForm() {
+    let isValid = true;
+    const requiredFields = [
+      { id: 'nama', msg: 'Nama lengkap diperlukan.' },
+      { id: 'perusahaan', msg: 'Nama perusahaan diperlukan.' },
+      { id: 'email', msg: 'Email valid diperlukan.', isEmail: true },
+      { id: 'whatsapp', msg: 'Nomor aktif diperlukan.' },
+      { id: 'industri', msg: 'Pilih kategori industri.' },
+      { id: 'volume', msg: 'Pilih frekuensi kebutuhan.' }
+    ];
+
+    requiredFields.forEach(f => {
+      const el = document.getElementById(f.id);
+      clearError(el);
+      
+      if (!el.value.trim()) {
+        showError(el, f.msg);
+        isValid = false;
+      } else if (f.isEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)) {
+        showError(el, 'Format email salah.');
+        isValid = false;
+      }
+    });
+
+    const checkbox = document.getElementById('setuju');
+    const checkboxWrap = document.getElementById('checkbox-wrap');
+    if (!checkbox.checked) {
+      isValid = false;
+      gsap.fromTo(checkboxWrap, { x: -6 }, { x: 6, yoyo: true, repeat: 5, duration: 0.05 });
+      checkboxWrap.classList.replace('border-gray-100', 'border-red-400');
+      checkboxWrap.classList.replace('bg-gray-50', 'bg-red-50');
+    } else {
+      checkboxWrap.classList.replace('border-red-400', 'border-gray-100');
+      checkboxWrap.classList.replace('bg-red-50', 'bg-gray-50');
+    }
+
+    return isValid;
+  }
+
+  document.querySelectorAll('.form-field').forEach(input => {
+    input.addEventListener('input', () => clearError(input));
+    input.addEventListener('change', () => clearError(input));
+  });
+  document.getElementById('setuju').addEventListener('change', (e) => {
+    const wrap = document.getElementById('checkbox-wrap');
+    if(e.target.checked) {
+      wrap.classList.replace('border-red-400', 'border-gray-100');
+      wrap.classList.replace('bg-red-50', 'bg-gray-50');
+    }
+  });
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    if (!validateForm()) {
+      const firstError = document.querySelector('.error-msg:not(.hidden)');
+      if(firstError) { lenis.scrollTo(firstError.parentElement, { offset: -150 }); }
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const spinner = document.getElementById('btn-spinner');
+    const toast = document.getElementById('toast');
+
+    btn.disabled = true;
+    btnText.style.opacity = '0';
+    spinner.classList.remove('hidden');
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btnText.style.opacity = '1';
+      spinner.classList.add('hidden');
+      e.target.reset();
+
+      toast.classList.add('show');
+      gsap.fromTo(toast, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" });
+      
+      setTimeout(() => {
+        gsap.to(toast, { y: 20, opacity: 0, duration: 0.4, onComplete: () => toast.classList.remove('show') });
+      }, 5000);
+    }, 2000);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tentang Kami — UD NIMARS | Premium B2B Fresh Supply</title>
+  <meta name="description" content="Profil profesional UD NIMARS - Mitra rantai pasok agrikultur terpercaya untuk sektor HORECA dan retail modern di seluruh Indonesia." />
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="UD NIMARS">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              green: '#2D5A27',
+              'green-dark': '#1e3d1a',
+              'green-light': '#3a7232',
+              orange: '#E67E22',
+              'orange-light': '#F2994A',
+              dark: '#333333',
+              gray: '#F9FAFB',
+              border: '#E5E7EB'
+            }
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Reset & Base Elements */
+    html { scroll-behavior: auto; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #333333;
+      background-color: #ffffff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    ::selection { background-color: #2D5A27; color: #ffffff; }
+
+    .section-spacing { padding: 120px 0; }
+    
+    /* ==========================================================================
+       01. FLOATING CAPSULE HEADER (WHITE BACKGROUND) - GLOBAL
+       ========================================================================== */
+    #floating-header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 95%;
+      max-width: 1400px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #floating-header.scrolled {
+      top: 16px;
+      box-shadow: 0 15px 40px rgba(45, 90, 39, 0.12);
+    }
+    
+    .header-left { display: flex; align-items: center; flex: 1; justify-content: flex-end; padding-right: 2rem; }
+    .header-center { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .header-right { display: flex; align-items: center; flex: 1; justify-content: flex-start; padding-left: 2rem; }
+    .nav-links-container { display: flex; align-items: center; gap: 2.5rem; }
+    
+    .logo-container { display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease; }
+    .logo-container:hover { transform: scale(1.1); }
+    
+    .nav-link { 
+      font-family: 'Montserrat', sans-serif; 
+      font-size: 0.85rem; 
+      font-weight: 700; 
+      color: #0e2a0b; 
+      text-transform: uppercase; 
+      letter-spacing: 0.08em; 
+      text-decoration: none; 
+      position: relative; 
+      padding: 8px 0; 
+      transition: color 0.3s ease; 
+    }
+    .nav-link::after { 
+      content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px; 
+      background: #F2994A; transform: translateX(-50%); transition: width 0.3s ease; border-radius: 2px; 
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #F2994A !important; }
+    
+    @media (max-width: 1024px) {
+      #floating-header { width: 95%; padding: 10px 20px; }
+      .hidden-mobile { display: none !important; }
+      .header-left, .header-right { padding: 0; justify-content: flex-end; flex: unset;}
+      .header-center { flex: 1; justify-content: flex-start; }
+      .mobile-menu-btn { display: flex !important; color: #0e2a0b !important; }
+    }
+
+    /* Scroll Progress */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 4px;
+      background: linear-gradient(90deg, #2D5A27, #F2994A);
+      z-index: 101; width: 0%; transition: width 0.1s linear;
+    }
+
+    /* ==========================================================================
+       02. ABOUT.HTML SPECIFIC COMPONENTS
+       ========================================================================== */
+    .btn-primary {
+      background-color: #E67E22; color: #ffffff;
+      padding: 1rem 2.5rem; border-radius: 8px;
+      font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .btn-primary:hover {
+      background-color: #d35400; transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(230, 126, 34, 0.3);
+    }
+
+    .btn-outline-white {
+      background-color: transparent; color: #ffffff;
+      padding: 1rem 2.5rem; border-radius: 8px;
+      font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 0.95rem;
+      transition: all 0.3s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .btn-outline-white:hover {
+      background-color: #ffffff; color: #2D5A27; transform: translateY(-2px);
+    }
+
+    .b2b-card {
+      background: #ffffff; padding: 3rem 2.5rem; border-radius: 16px;
+      border: 1px solid #E5E7EB; transition: all 0.4s ease; height: 100%;
+    }
+    .b2b-card:hover {
+      transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(45,90,39,0.15);
+      border-color: #2D5A27;
+    }
+
+    .section-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 100px;
+      font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .pill-green { background-color: rgba(45, 90, 39, 0.1); color: #2D5A27; border: 1px solid rgba(45, 90, 39, 0.2); }
+    .pill-white { background-color: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); }
+
+    .pattern-grid {
+      background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .pattern-dots {
+      background-image: radial-gradient(#E5E7EB 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+
+    /* FAQ */
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .faq-item.active .faq-answer { max-height: 500px; }
+    .faq-item.active .faq-icon { transform: rotate(180deg); color: #E67E22; }
+  </style>
+</head>
+<body class="bg-brand-gray selection:bg-brand-green selection:text-white relative">
+
+  <div id="scroll-progress"></div>
+
+  <nav id="floating-header">
+    <div class="header-left">
+      <div class="nav-links-container hidden-mobile">
+        <a href="about.html" class="nav-link" style="color: #F2994A;">Tentang Kami</a>
+        <a href="produk.html" class="nav-link">Produk</a>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <a href="index.html" class="logo-container" title="Beranda UD NIMARS">
+        <svg width="52" height="52" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 5C25.147 5 5 25.147 5 50C5 74.853 25.147 95 50 95C74.853 95 95 74.853 95 50C95 25.147 74.853 5 50 5Z" fill="#2D5A27"/>
+          <path d="M95 50C95 25.147 74.853 5 50 5V95C74.853 95 95 74.853 95 50Z" fill="#1A3317"/>
+          <path d="M50 85V40" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50 65C35 65 25 50 25 50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50 55C65 55 75 40 75 40" stroke="#F2994A" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="50" cy="25" r="8" fill="#F2994A"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <div class="nav-links-container hidden-mobile">
+        <a href="team.html" class="nav-link">Tim Kami</a>
+        <a href="kontak.html" class="nav-link">Kontak Kami</a>
+      </div>
+      <button class="mobile-menu-btn hidden items-center justify-center p-2 text-[#0e2a0b]" id="menu-toggle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-[#0e2a0b]/95 z-[200] hidden flex-col items-center justify-center gap-8 backdrop-blur-2xl">
+    <a href="index.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Home</a>
+    <a href="about.html" class="text-[#F2994A] text-3xl font-display font-black transition-colors">Tentang Kami</a>
+    <a href="produk.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Produk</a>
+    <a href="team.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Tim Kami</a>
+    <a href="kontak.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Kontak Kami</a>
+    
+    <button id="close-mobile" class="mt-10 p-4 text-white/50 hover:text-[#F2994A] bg-white/5 rounded-full border border-white/10">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+
+  <section class="relative bg-brand-green pt-40 pb-32 lg:pb-48 overflow-hidden">
+    <div class="absolute inset-0 pattern-grid opacity-20"></div>
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-green-dark/40 to-transparent"></div>
+    
+    <div class="container mx-auto px-6 lg:px-12 relative z-10 mt-8">
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-7 text-center lg:text-left" id="hero-text">
+          <div class="section-pill pill-white">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F2994A" stroke-width="3" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Company Profile</span>
+          </div>
+          
+          <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-[1.1] mb-8 tracking-tight">
+            <span>Menyediakan Kesegaran,</span><br/>
+            <span class="text-brand-orange-light relative inline-block">
+                <span>Membangun Kepercayaan.</span>
+                <svg class="absolute w-full h-3 -bottom-1 left-0 text-brand-orange-light/50" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M0,5 Q100,10 200,5" stroke="currentColor" stroke-width="4" fill="none"/></svg>
+            </span>
+          </h1>
+          
+          <p class="font-body text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-12">
+            UD Nimars adalah mitra strategis B2B di balik dapur industri HORECA dan retail modern tingkat nasional. Kami menghubungkan dedikasi petani lokal dengan standar kualitas dan kepatuhan (compliance) global.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+            <a href="#value-chain" class="btn-primary">
+                <span>Pelajari Cara Kerja Kami</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="company_profile_udnimars.pdf" class="btn-outline-white" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                <span>Unduh Company Profile</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 hidden lg:block" id="hero-graphic">
+            <div class="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
+               <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=1000&auto=format&fit=crop" alt="Corporate Agriculture" class="w-full h-full object-cover object-center" />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-green-dark/80 via-transparent to-transparent"></div>
+                
+                <div class="absolute bottom-8 left-8 right-8 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-white">
+                    <p class="font-heading font-bold text-lg mb-1">Sertifikasi Keamanan Pangan</p>
+                    <p class="text-sm text-white/70 font-body">Standar HACCP & ISO 22000 Terintegrasi dalam setiap rantai pasok kami.</p>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-gray-200 relative z-20 -mt-10 mx-6 lg:mx-12 rounded-2xl shadow-xl">
+      <div class="container mx-auto px-8 py-10">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-gray-100">
+            <div class="text-center px-4 stat-item">
+                <p class="text-4xl lg:text-5xl font-black text-brand-orange mb-2">12<span class="text-2xl">+</span></p>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Tahun Pengalaman</p>
+            </div>
+            <div class="text-center px-4 stat-item">
+                <p class="text-4xl lg:text-5xl font-black text-brand-green mb-2">250<span class="text-2xl">+</span></p>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Klien Korporasi</p>
+            </div>
+            <div class="text-center px-4 stat-item">
+                <p class="text-4xl lg:text-5xl font-black text-brand-orange mb-2">60<span class="text-2xl">+</span></p>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Varietas Komoditas</p>
+            </div>
+            <div class="text-center px-4 stat-item">
+                <p class="text-4xl lg:text-5xl font-black text-brand-green mb-2">98<span class="text-2xl">%</span></p>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">SLA On-Time Delivery</p>
+            </div>
+        </div>
+      </div>
+  </section>
+
+  <section id="story" class="section-spacing bg-brand-gray relative">
+    <div class="absolute top-0 left-0 w-full h-full pattern-dots opacity-50 z-0 pointer-events-none"></div>
+    <div class="container mx-auto px-6 lg:px-12 relative z-10">
+      
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
+        <div class="relative reveal-scale">
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3]">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop" alt="Warehouse Operations" class="w-full h-full object-cover" id="parallax-img" loading="lazy" />
+          </div>
+          <div class="absolute -bottom-8 -right-8 bg-brand-green p-8 rounded-2xl text-white shadow-2xl border-4 border-brand-gray hidden md:block w-64">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E67E22" stroke-width="2" class="mb-4"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            <p class="text-sm font-body text-white/70 mb-1">Berdiri Sejak</p>
+            <p class="text-4xl font-black font-heading tracking-tight">2012</p>
+          </div>
+        </div>
+
+        <div class="reveal-up">
+          <div class="section-pill pill-green">
+            <span>Executive Summary</span>
+          </div>
+          
+          <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-black text-brand-dark mb-8 leading-tight">
+            <span>Memutus Kompleksitas</span><br/>
+            <span class="text-brand-green">Rantai Pasok Agrikultur.</span>
+          </h2>
+          
+          <div class="space-y-6 text-gray-600 leading-relaxed text-lg font-body">
+            <p>
+              UD Nimars lahir dari sebuah pemahaman operasional yang fundamental: <strong>Keunggulan sebuah bisnis kuliner dan retail berskala besar selalu bermula dari stabilitas bahan baku.</strong>
+            </p>
+            <p>
+              Sebagai perusahaan spesialis penyedia buah dan sayur segar (Fresh Produce), kami hadir tidak sekadar sebagai vendor, melainkan sebagai <em>Strategic Supply Chain Partner</em>. Kami mendesain ulang rantai pasok tradisional yang inefisien menjadi alur distribusi modern yang terkontrol secara ketat.
+            </p>
+            <p>
+              Dari restoran fine-dining bintang lima, jaringan perhotelan internasional, catering industri skala masif, hingga jaringan supermarket modern—kami berkomitmen menjadi tulang punggung operasional Anda melalui pasokan yang konsisten, harga terukur, dan mitigasi risiko kelangkaan komoditas.
+            </p>
+          </div>
+          
+          <hr class="my-10 border-gray-200" />
+          
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-brand-green shrink-0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-brand-dark mb-1">Jaringan Petani Binaan</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Akses eksklusif ke sentra pertanian di Jawa dan Sumatera.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-brand-orange shrink-0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-brand-dark mb-1">Garansi Retur 100%</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Kebijakan penggantian barang tanpa birokrasi rumit.</p>
+                </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-spacing bg-white">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="text-center max-w-3xl mx-auto mb-20 reveal-up">
+        <div class="section-pill pill-green">
+          <span>Corporate Direction</span>
+        </div>
+        <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-black text-brand-dark mb-6">Tujuan & Komitmen Korporat</h2>
+        <p class="text-gray-500 text-lg leading-relaxed">Landasan strategis dan filosofis yang mengarahkan setiap keputusan bisnis dan operasional harian di UD Nimars.</p>
+      </div>
+      
+      <div class="bg-brand-green p-10 md:p-16 lg:p-20 rounded-[2rem] shadow-2xl text-center mb-16 reveal-up relative overflow-hidden">
+        <div class="absolute inset-0 pattern-grid opacity-10"></div>
+        <svg class="absolute top-10 left-10 text-white/5 w-32 h-32" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+        
+        <div class="relative z-10">
+            <span class="text-brand-orange-light font-black tracking-[0.2em] uppercase text-sm mb-6 inline-block">Pernyataan Visi</span>
+            <blockquote class="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-white leading-tight max-w-4xl mx-auto">
+              "Menjadi katalisator utama dalam modernisasi rantai pasok agrikultur B2B di Indonesia, menetapkan standar emas global dalam kualitas, transparansi, dan efisiensi pangan segar."
+            </blockquote>
+        </div>
+      </div>
+
+      <div class="mb-10 text-center reveal-up">
+        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-2">Pilar Misi Kami</h3>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="b2b-card reveal-up">
+          <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-brand-green mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-brand-dark mb-4">Quality Excellence</h3>
+          <p class="text-gray-500 leading-relaxed font-body">Menyediakan kurasi produk segar dengan spesifikasi B2B yang ketat, melalui proses penyortiran manual presisi dan uji kelayakan berlapis.</p>
+        </div>
+        <div class="b2b-card reveal-up">
+            <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-brand-orange mb-8">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-brand-dark mb-4">Supply Security</h3>
+            <p class="text-gray-500 leading-relaxed font-body">Menjaga stabilitas volume dan kepastian harga bahan baku bagi klien di tengah fluktuasi cuaca dan dinamika pasar komoditas.</p>
+        </div>
+        <div class="b2b-card reveal-up">
+            <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-brand-green mb-8">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-brand-dark mb-4">Agile Operations</h3>
+            <p class="text-gray-500 leading-relaxed font-body">Mengoperasikan sistem logistik terintegrasi dengan armada cold-chain mandiri untuk memastikan Service Level Agreement (SLA) 98% On-Time.</p>
+        </div>
+        <div class="b2b-card reveal-up">
+            <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-brand-orange mb-8">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-brand-dark mb-4">Farmer Empowerment</h3>
+            <p class="text-gray-500 leading-relaxed font-body">Membangun skema kemitraan Fair Trade yang mengedukasi dan meningkatkan kesejahteraan finansial ekosistem petani lokal nusantara.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="value-chain" class="section-spacing bg-brand-green text-white overflow-hidden relative">
+    <div class="absolute inset-0 pattern-dots opacity-10"></div>
+    
+    <div class="container mx-auto px-6 lg:px-12 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-20 reveal-up">
+        <div class="section-pill pill-white">
+          <span>Value Chain Operations</span>
+        </div>
+        <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-black mb-6">
+          <span>Standard Operational</span><br/>
+          <span class="text-brand-orange-light">Procedure (SOP)</span>
+        </h2>
+        <p class="text-white/70 text-lg">Pendekatan komprehensif kami dari hulu ke hilir untuk memitigasi risiko kerusakan (shrinkage) dan mempertahankan kesegaran maksimal.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div class="bg-brand-green-dark/50 border border-white/10 p-8 rounded-2xl hover:bg-brand-green-dark transition-colors reveal-up step-card">
+            <div class="flex justify-between items-start mb-6">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-brand-orange-light">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                </div>
+                <span class="text-4xl font-black text-white/5">01</span>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3">Data-Driven Sourcing</h3>
+            <p class="text-white/60 font-body text-sm leading-relaxed">Prakiraan permintaan klien diolah untuk menjadwalkan masa panen yang tepat dengan mitra kebun, mencegah penumpukan (overstock).</p>
+        </div>
+
+        <div class="bg-brand-green-dark/50 border border-white/10 p-8 rounded-2xl hover:bg-brand-green-dark transition-colors reveal-up step-card">
+            <div class="flex justify-between items-start mb-6">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-brand-orange-light">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                </div>
+                <span class="text-4xl font-black text-white/5">02</span>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3">Receiving & Pre-Cooling</h3>
+            <p class="text-white/60 font-body text-sm leading-relaxed">Komoditas yang tiba di fasilitas kami segera masuk ke proses pre-cooling untuk menghentikan respirasi panas dari lahan pertanian.</p>
+        </div>
+
+        <div class="bg-brand-green-dark/50 border border-white/10 p-8 rounded-2xl hover:bg-brand-green-dark transition-colors reveal-up step-card">
+            <div class="flex justify-between items-start mb-6">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-brand-orange-light">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <span class="text-4xl font-black text-white/5">03</span>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3">Strict Sorting (QC 1)</h3>
+            <p class="text-white/60 font-body text-sm leading-relaxed">Penyortiran manual berdasarkan ukuran (sizing), warna, dan tingkat kematangan sesuai dengan spesifikasi ketat masing-masing klien.</p>
+        </div>
+
+        <div class="bg-brand-green-dark/50 border border-white/10 p-8 rounded-2xl hover:bg-brand-green-dark transition-colors reveal-up step-card">
+            <div class="flex justify-between items-start mb-6">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-brand-orange-light">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                </div>
+                <span class="text-4xl font-black text-white/5">04</span>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3">Washing & Packaging</h3>
+            <p class="text-white/60 font-body text-sm leading-relaxed">Pembersihan higienis menggunakan standar food-grade, dilanjutkan pengemasan vakum atau jaring sesuai kebutuhan pelestarian produk.</p>
+        </div>
+
+        <div class="bg-brand-green-dark/50 border border-white/10 p-8 rounded-2xl hover:bg-brand-green-dark transition-colors reveal-up step-card">
+            <div class="flex justify-between items-start mb-6">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-brand-orange-light">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <span class="text-4xl font-black text-white/5">05</span>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3">Final Dispatch Audit (QC 2)</h3>
+            <p class="text-white/60 font-body text-sm leading-relaxed">Pengecekan ulang sebelum pemuatan ke armada. Memastikan kesesuaian dokumen pesanan (PO) dengan kuantitas fisik.</p>
+        </div>
+
+        <div class="bg-brand-green-dark/50 border border-white/10 p-8 rounded-2xl hover:bg-brand-green-dark transition-colors reveal-up step-card">
+            <div class="flex justify-between items-start mb-6">
+                <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-brand-orange-light">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <span class="text-4xl font-black text-white/5">06</span>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3">Cold-Chain Logistics</h3>
+            <p class="text-white/60 font-body text-sm leading-relaxed">Pengiriman dengan armada chiller bersuhu terkontrol (2°C - 8°C) untuk mencegah fluktuasi termal selama perjalanan ke fasilitas Anda.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section-spacing bg-white">
+    <div class="container mx-auto px-6 lg:px-12">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="reveal-up">
+                <div class="section-pill pill-green">
+                    <span>ESG Commitment</span>
+                </div>
+                <h2 class="font-heading text-3xl md:text-4xl font-black text-brand-dark mb-6 leading-tight">Praktik Bisnis Berkelanjutan.</h2>
+                <p class="text-gray-600 mb-8 font-body leading-relaxed text-lg">
+                    Di UD Nimars, keberlanjutan bukan sekadar inisiatif CSR, melainkan model bisnis inti. Kami menyadari bahwa masa depan industri pangan bergantung pada ekosistem lingkungan yang sehat dan komunitas petani yang sejahtera.
+                </p>
+                
+                <ul class="space-y-5">
+                    <li class="flex items-start gap-4">
+                        <svg class="w-6 h-6 text-brand-green mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <div>
+                            <strong class="text-brand-dark block mb-1 font-heading">Zero Food Waste Initiative</strong>
+                            <span class="text-gray-500 text-sm font-body">Sisa sortiran yang tidak masuk kualifikasi B2B dialihkan ke industri pakan ternak atau kompos organik.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <svg class="w-6 h-6 text-brand-green mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <div>
+                            <strong class="text-brand-dark block mb-1 font-heading">Eco-Friendly Packaging</strong>
+                            <span class="text-gray-500 text-sm font-body">Transisi bertahap menuju penggunaan krat plastik yang dapat digunakan ulang (reusable crates) menggantikan karton sekali pakai.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <svg class="w-6 h-6 text-brand-green mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <div>
+                            <strong class="text-brand-dark block mb-1 font-heading">Pemberdayaan Ekonomi Lokal</strong>
+                            <span class="text-gray-500 text-sm font-body">Membeli langsung dari petani dengan sistem pembayaran adil untuk memutus tengkulak yang merugikan.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="relative reveal-scale">
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1530836369250-ef71a3f5e4bf?q=80&w=800" alt="Eco Farming" class="rounded-2xl w-full h-64 object-cover shadow-lg" />
+                    <img src="https://images.unsplash.com/photo-1599839619722-39751411ea63?q=80&w=800" alt="Fresh Supply" class="rounded-2xl w-full h-64 object-cover shadow-lg mt-8" />
+                </div>
+            </div>
+            
+        </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-50 border-y border-gray-200 overflow-hidden">
+    <div class="container mx-auto px-6 text-center mb-10">
+        <p class="font-heading font-bold text-gray-400 tracking-widest uppercase text-sm">Dipercaya oleh Ratusan Bisnis Terkemuka</p>
+    </div>
+    <div class="flex gap-16 justify-center items-center flex-wrap opacity-50 grayscale hover:grayscale-0 transition-all duration-500 container mx-auto">
+        <svg class="h-8" viewBox="0 0 100 30" fill="currentColor"><text x="0" y="20" font-family="Montserrat" font-weight="900" font-size="20">HOTEL GROUP</text></svg>
+        <svg class="h-8" viewBox="0 0 100 30" fill="currentColor"><text x="0" y="20" font-family="Montserrat" font-weight="900" font-size="20">RESTAURANT</text></svg>
+        <svg class="h-8" viewBox="0 0 100 30" fill="currentColor"><text x="0" y="20" font-family="Montserrat" font-weight="900" font-size="20">CATERING CO.</text></svg>
+        <svg class="h-8" viewBox="0 0 100 30" fill="currentColor"><text x="0" y="20" font-family="Montserrat" font-weight="900" font-size="20">SUPERMARKET</text></svg>
+        <svg class="h-8 hidden md:block" viewBox="0 0 100 30" fill="currentColor"><text x="0" y="20" font-family="Montserrat" font-weight="900" font-size="20">HOSPITALITY</text></svg>
+    </div>
+  </section>
+
+  <section class="section-spacing bg-white">
+    <div class="container mx-auto px-6 lg:px-12 max-w-4xl">
+        <div class="text-center mb-16 reveal-up">
+            <h2 class="font-heading text-3xl md:text-4xl font-black text-brand-dark mb-4">Frequently Asked Questions</h2>
+            <p class="text-gray-500">Pertanyaan umum terkait kemitraan B2B dan operasional kami.</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="border border-gray-200 rounded-xl overflow-hidden faq-item reveal-up">
+                <button class="w-full px-6 py-5 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    <span class="font-heading font-bold text-brand-dark">Apakah UD Nimars melayani pembelian retail/perorangan?</span>
+                    <svg class="w-5 h-5 text-gray-400 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer bg-white">
+                    <div class="px-6 py-5 text-gray-500 font-body text-sm leading-relaxed">
+                        Tidak. Saat ini model bisnis kami berfokus 100% pada B2B (Business-to-Business) untuk memastikan kami dapat memenuhi volume dan SLA yang ketat bagi klien korporat kami seperti HORECA dan Supermarket.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border border-gray-200 rounded-xl overflow-hidden faq-item reveal-up">
+                <button class="w-full px-6 py-5 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    <span class="font-heading font-bold text-brand-dark">Bagaimana sistem pembayaran untuk klien B2B?</span>
+                    <svg class="w-5 h-5 text-gray-400 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer bg-white">
+                    <div class="px-6 py-5 text-gray-500 font-body text-sm leading-relaxed">
+                        Kami menawarkan skema pembayaran Term of Payment (TOP) yang fleksibel mulai dari 14 hari hingga 30 hari (bergantung pada hasil credit assessment) atau Cash on Delivery (COD) untuk klien awal.
+                    </div>
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-xl overflow-hidden faq-item reveal-up">
+                <button class="w-full px-6 py-5 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    <span class="font-heading font-bold text-brand-dark">Bagaimana jika produk yang dikirim tidak sesuai standar?</span>
+                    <svg class="w-5 h-5 text-gray-400 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer bg-white">
+                    <div class="px-6 py-5 text-gray-500 font-body text-sm leading-relaxed">
+                        Kami memiliki jaminan Retur 100%. Jika ada komoditas yang tidak sesuai spesifikasi PO (Purchase Order), klien dapat langsung melakukan penolakan saat receiving, dan kami akan menggantinya pada hari yang sama atau memotongnya dari invoice.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-brand-dark text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark to-[#1a1a1a] z-0"></div>
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-orange rounded-full blur-[100px] opacity-20 z-0"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-green rounded-full blur-[100px] opacity-20 z-0"></div>
+    
+    <div class="container mx-auto px-6 relative z-10 text-center reveal-up">
+      <h2 class="font-heading text-3xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight">
+        Siap Mengelevasi Kualitas<br class="hidden md:block"/> Bahan Baku Anda?
+      </h2>
+      <p class="font-body text-white/60 mb-10 max-w-2xl mx-auto text-lg">
+        Bergabunglah dengan ratusan perusahaan lain yang telah mempercayakan suplai fresh produce mereka kepada sistem manajemen rantai pasok profesional kami.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="contact.html" class="btn-primary">
+            <span>Hubungi Tim Sales B2B</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+        <a href="catalog.pdf" class="btn-outline-white text-white hover:bg-white hover:text-brand-dark">
+            <span>Unduh E-Katalog</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-[#020617] text-white pt-24 pb-12 border-t-8 border-[#2D5A27]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-14 mb-20">
+        
+        <div class="lg:col-span-4 pr-6">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 rounded-2xl bg-[#2D5A27] flex items-center justify-center border border-white/10">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            <span class="font-display font-black text-2xl tracking-wide">UD NIMARS</span>
+          </div>
+          <p class="text-gray-400 text-base leading-relaxed mb-8">
+            Infrastruktur pasokan segar premium B2B terintegrasi tingkat tinggi. Menghubungkan potensi ladang agrikultur nusantara dengan eksekutif kuliner di seluruh Indonesia.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 lg:col-start-6">
+          <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Pintas</h4>
+          <ul class="space-y-4">
+            <li><a href="about.html" class="text-gray-400 hover:text-white text-base transition-colors">Tentang Kami</a></li>
+            <li><a href="produk.html" class="text-gray-400 hover:text-white text-base transition-colors">Produk</a></li>
+            <li><a href="team.html" class="text-gray-400 hover:text-white text-base transition-colors">Tim Kami</a></li>
+            <li><a href="kontak.html" class="text-gray-400 hover:text-white text-base transition-colors">Kontak Kami</a></li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-4">
+          <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Katalog & Insight</h4>
+          <p class="text-gray-400 text-base mb-6 leading-relaxed">Dapatkan update pergerakan tren harga komoditas dan *price list* bulanan langsung ke email dashboard procurement Anda.</p>
+          <div class="flex h-14">
+            <input type="email" placeholder="Email Corporate Address" class="bg-white/5 border border-white/20 border-r-0 rounded-l-2xl px-6 w-full text-base outline-none focus:border-[#F2994A] text-white placeholder-gray-500 transition-colors">
+            <button class="bg-[#F2994A] hover:bg-orange-600 px-8 rounded-r-2xl font-bold text-base transition-colors">Subscribe</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500">
+        <p>&copy; 2026 UD NIMARS. All rights reserved.</p>
+        <div class="flex gap-8">
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors">Cookie Settings</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFaq(button) {
+        const item = button.parentElement;
+        const isActive = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+    }
+
+    window.addEventListener("load", () => {
+        // Inisialisasi Lenis Smooth Scroll
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        // Header Scroll & Progress Bar Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            document.getElementById('scroll-progress').style.width = ((scrolled / total) * 100) + '%';
+            
+            const header = document.getElementById('floating-header');
+            if (window.scrollY > 80) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.remove('hidden'); 
+            mobileMenu.classList.add('flex');
+            gsap.fromTo(mobileMenu, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+            lenis.stop(); 
+        });
+
+        document.getElementById('close-mobile').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            gsap.to(mobileMenu, { opacity: 0, duration: 0.3, onComplete: () => {
+                mobileMenu.classList.add('hidden'); 
+                mobileMenu.classList.remove('flex');
+            }});
+            lenis.start(); 
+        });
+
+        // ANIMASI HERO
+        gsap.from("#hero-text", { y: 40, opacity: 0, duration: 1, ease: "power3.out", delay: 0.2 });
+        gsap.from("#hero-graphic", { scale: 0.95, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.4 });
+
+        // ANIMASI SCROLL: Reveal Up
+        document.querySelectorAll('.reveal-up').forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" },
+                y: 40, opacity: 0, duration: 0.8, ease: "power3.out"
+            });
+        });
+
+        // ANIMASI SCROLL: Reveal Scale
+        document.querySelectorAll('.reveal-scale').forEach((el) => {
+            gsap.from(el, { 
+                scrollTrigger: { trigger: el, start: "top 85%" }, 
+                scale: 0.95, opacity: 0, duration: 1, ease: "power4.out" 
+            });
+        });
+
+        // Animasi Parallax kecil pada gambar cerita
+        gsap.to("#parallax-img", {
+            scrollTrigger: { trigger: "#story", start: "top bottom", end: "bottom top", scrub: 1 },
+            y: 50, ease: "none"
+        });
+
+        // Animasi Box Statistik
+        document.querySelectorAll('.stat-item').forEach((item, index) => {
+            gsap.from(item, { 
+                scrollTrigger: { trigger: item.parentElement, start: "top 90%" }, 
+                opacity: 0, y: 30, duration: 0.6, delay: index * 0.1, ease: "back.out(1.5)" 
+            });
+        });
+    });
+  </script>
+</body>
+</html>

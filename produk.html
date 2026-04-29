@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Katalog Produk & Layanan — UD NIMARS | Supplier B2B Premium</title>
+  <meta name="description" content="Katalog produk buah & sayur premium UD NIMARS. Distribusi cold chain dan quality assurance untuk HORECA dan retail modern." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              green: '#2D5A27',
+              darkGreen: '#1A3317',
+              orange: '#F2994A',
+              dark: '#111827',
+              gray: '#374151',
+              softGreen: '#F4F9F4'
+            }
+          },
+          animation: {
+            'float-slow': 'float 6s ease-in-out infinite',
+            'float-delayed': 'float 8s ease-in-out infinite 2s',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Reset & Typography Optimization */
+    body {
+      color: #374151;
+      background-color: #ffffff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Native Reveal Animation (Zero Lag, Hardware Accelerated) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Minimalist Reading Progress Bar */
+    #scroll-progress {
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      height: 4px;
+      background: linear-gradient(90deg, #2D5A27, #F2994A);
+      z-index: 10000; 
+      width: 0%;
+      transition: width 0.1s ease-out;
+    }
+
+    /* FAQ Accordion Transitions */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding-bottom: 1.5rem;
+      padding-top: 0.5rem;
+    }
+    .faq-icon {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ==========================================================================
+       FLOATING CAPSULE HEADER (GLOBAL)
+       ========================================================================== */
+    #floating-header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 95%;
+      max-width: 1400px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #floating-header.scrolled {
+      top: 16px;
+      box-shadow: 0 15px 40px rgba(45, 90, 39, 0.12);
+    }
+    
+    .header-left { display: flex; align-items: center; flex: 1; justify-content: flex-end; padding-right: 2rem; }
+    .header-center { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .header-right { display: flex; align-items: center; flex: 1; justify-content: flex-start; padding-left: 2rem; }
+    .nav-links-container { display: flex; align-items: center; gap: 2.5rem; }
+    
+    .logo-container { display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease; cursor: pointer; }
+    .logo-container:hover { transform: scale(1.1); }
+    
+    .nav-link { 
+      font-family: 'Montserrat', sans-serif; 
+      font-size: 0.85rem; 
+      font-weight: 700; 
+      color: #0e2a0b; 
+      text-transform: uppercase; 
+      letter-spacing: 0.08em; 
+      text-decoration: none; 
+      position: relative; 
+      padding: 8px 0; 
+      transition: color 0.3s ease; 
+      cursor: pointer; 
+    }
+    .nav-link::after { 
+      content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px; 
+      background: #F2994A; transform: translateX(-50%); transition: width 0.3s ease; border-radius: 2px; 
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #F2994A !important; }
+    
+    @media (max-width: 1024px) {
+      #floating-header { width: 95%; padding: 10px 20px; }
+      .hidden-mobile { display: none !important; }
+      .header-left, .header-right { padding: 0; justify-content: flex-end; flex: unset;}
+      .header-center { flex: 1; justify-content: flex-start; }
+      .mobile-menu-btn { display: flex !important; color: #0e2a0b !important; cursor: pointer;}
+    }
+  </style>
+</head>
+<body class="font-sans antialiased text-brand-gray">
+
+  <div id="scroll-progress"></div>
+
+  <nav id="floating-header">
+    <div class="header-left">
+      <div class="nav-links-container hidden-mobile">
+        <a href="about.html" class="nav-link">Tentang Kami</a>
+        <a href="produk.html" class="nav-link" style="color: #F2994A;">Produk</a>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <a href="index.html" class="logo-container" title="Beranda UD NIMARS">
+        <svg width="52" height="52" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 5C25.147 5 5 25.147 5 50C5 74.853 25.147 95 50 95C74.853 95 95 74.853 95 50C95 25.147 74.853 5 50 5Z" fill="#2D5A27"/>
+          <path d="M95 50C95 25.147 74.853 5 50 5V95C74.853 95 95 74.853 95 50Z" fill="#1A3317"/>
+          <path d="M50 85V40" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50 65C35 65 25 50 25 50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50 55C65 55 75 40 75 40" stroke="#F2994A" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="50" cy="25" r="8" fill="#F2994A"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <div class="nav-links-container hidden-mobile">
+        <a href="team.html" class="nav-link">Tim Kami</a>
+        <a href="kontak.html" class="nav-link">Kontak Kami</a>
+      </div>
+      <button class="mobile-menu-btn hidden items-center justify-center p-2 text-[#0e2a0b]" id="menu-toggle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-[#0e2a0b]/95 z-[200] hidden flex-col items-center justify-center gap-8 backdrop-blur-2xl">
+    <a href="index.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Home</a>
+    <a href="about.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Tentang Kami</a>
+    <a href="produk.html" class="text-[#F2994A] text-3xl font-display font-black transition-colors">Produk</a>
+    <a href="team.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Tim Kami</a>
+    <a href="kontak.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Kontak Kami</a>
+    
+    <button id="close-mobile" class="mt-10 p-4 text-white/50 hover:text-[#F2994A] bg-white/5 rounded-full border border-white/10">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+
+  <section class="relative bg-gradient-to-br from-brand-darkGreen via-brand-green to-[#23471e] pt-48 pb-32 overflow-hidden">
+    <div class="absolute top-10 left-10 w-[30rem] h-[30rem] bg-white/5 rounded-full blur-[100px] animate-float-slow pointer-events-none"></div>
+    <div class="absolute -bottom-20 -right-10 w-[40rem] h-[40rem] bg-brand-orange/10 rounded-full blur-[120px] animate-float-delayed pointer-events-none"></div>
+    
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50 pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-6 text-center relative z-10 reveal">
+      <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/10 text-brand-orange font-display text-xs font-bold tracking-widest uppercase mb-8 border border-white/20 backdrop-blur-md shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+        B2B Procurement Solutions
+      </div>
+      
+      <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-white mb-8 tracking-tight">
+        Katalog Komoditas <br/> 
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-yellow-400">
+          Terkurasi Setiap Batch.
+        </span>
+      </h1>
+      
+      <p class="text-white/80 text-xl leading-relaxed max-w-3xl mx-auto mb-12 font-light">
+        Kami menyortir dan mendistribusikan hasil bumi segar dengan spesifikasi tertinggi untuk memenuhi Service Level Agreement (SLA) jaringan retail modern, hotel, dan restoran Anda.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-5">
+        <a href="#katalog-buah" class="bg-brand-orange hover:bg-orange-600 text-white font-bold text-lg py-4 px-10 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(242,153,74,0.3)] flex items-center justify-center gap-3">
+          Jelajahi Katalog
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#kemitraan" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-lg py-4 px-10 rounded-xl transition-all duration-300 flex items-center justify-center backdrop-blur-sm">
+          Lihat Skema Harga
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-10 bg-white border-b border-gray-100 relative z-20 -mt-8 mx-6 lg:mx-12 rounded-2xl shadow-xl shadow-gray-200/50">
+    <div class="max-w-7xl mx-auto px-6 reveal">
+      <p class="text-center text-xs font-bold font-display text-gray-400 uppercase tracking-widest mb-6">Dipercaya Oleh 50+ Brand F&B dan Retail</p>
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale">
+        <svg class="h-8 w-auto text-brand-dark" fill="currentColor" viewBox="0 0 100 30"><path d="M10 15a5 5 0 100-10 5 5 0 000 10zm15 0a5 5 0 100-10 5 5 0 000 10zm15 0a5 5 0 100-10 5 5 0 000 10zM55 5h10v10H55zM75 5h10v10H75zM95 10a5 5 0 100-10 5 5 0 000 10z"/></svg>
+        <svg class="h-8 w-auto text-brand-dark" fill="currentColor" viewBox="0 0 100 30"><path d="M0 0h20v20H0zM25 10l10-10 10 10-10 10zM55 0h20v5H55zM55 15h20v5H55zM85 0h10v20H85z"/></svg>
+        <svg class="h-8 w-auto text-brand-dark hidden sm:block" fill="currentColor" viewBox="0 0 100 30"><circle cx="15" cy="15" r="10"/><rect x="35" y="5" width="20" height="20"/><polygon points="75,5 95,5 85,25"/></svg>
+        <svg class="h-8 w-auto text-brand-dark hidden md:block" fill="currentColor" viewBox="0 0 100 30"><path d="M5 5h15v15H5zM30 15a10 10 0 100-20 10 10 0 000 20zm30 0l10-20 10 20z"/></svg>
+        <svg class="h-8 w-auto text-brand-dark hidden lg:block" fill="currentColor" viewBox="0 0 100 30"><path d="M10 5h10v20H10zM30 5h10v20H30zM50 5h10v20H50zM70 15a10 10 0 100-20 10 10 0 000 20z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="katalog-buah" class="py-24 bg-white relative z-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      
+      <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 reveal">
+        <div class="max-w-2xl">
+          <span class="text-brand-orange font-display font-bold text-sm tracking-widest uppercase block mb-3">01. Kategori Premium</span>
+          <h2 class="font-display text-4xl font-black text-brand-dark mb-4">Buah Tropis & Eksotis</h2>
+          <p class="text-gray-500 text-lg">Suplai buah-buahan Grade Ekspor yang dikurasi secara manual. Memenuhi standar visual dan kalibrasi ketat untuk etalase supermarket dan kebutuhan dapur hotel.</p>
+        </div>
+        <a href="#" class="inline-flex items-center gap-2 text-brand-green font-bold hover:text-brand-darkGreen transition-colors border-b-2 border-brand-green pb-1">
+          Unduh Price List PDF
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] hover:border-brand-green/30 reveal group flex flex-col h-full">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-50">
+            <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=600&q=80" alt="Alpukat Mentega" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Grade Ekspor</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Alpukat Mentega</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: FRT-ALV-01</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Kalibrasi:</strong> 3-4 pcs per Kg</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Kematangan:</strong> 80-85% (Firm)</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Packing:</strong> Bulk 10kg Karton</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] hover:border-brand-green/30 reveal group flex flex-col h-full" style="transition-delay: 100ms;">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-50">
+            <img src="https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=600&q=80" alt="Pisang Cavendish" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Grade Ekspor</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Pisang Cavendish</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: FRT-CAV-02</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Kalibrasi:</strong> 5-7 fingers/cluster</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Color Index:</strong> Skala 3-4</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Packing:</strong> Karton 13kg Export</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] hover:border-brand-green/30 reveal group flex flex-col h-full" style="transition-delay: 200ms;">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-50">
+            <img src="https://images.unsplash.com/photo-1595475884562-073c188fb363?w=600&q=80" alt="Melon Sky Rocket" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Premium A</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Melon Sky Rocket</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: FRT-MLN-03</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Kalibrasi:</strong> 1.5 - 2.0 kg/pcs</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Brix (Manis):</strong> Minimal >12%</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Visual:</strong> Netting tebal rata</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] hover:border-brand-green/30 reveal group flex flex-col h-full" style="transition-delay: 300ms;">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-50">
+            <img src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80" alt="Mangga Harum Manis" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Grade Ekspor</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Mangga Harum Manis</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: FRT-MNG-04</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Kalibrasi:</strong> 350-450 gr/pcs</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Visual:</strong> Mulus, Bebas Getah</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0 bg-green-50 rounded-full p-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight"><strong>Packing:</strong> Box 5kg Export</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="katalog-sayur" class="py-24 bg-gray-50 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      
+      <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 reveal">
+        <div class="max-w-2xl">
+          <span class="text-brand-green font-display font-bold text-sm tracking-widest uppercase block mb-3">02. Kategori Harian</span>
+          <h2 class="font-display text-4xl font-black text-brand-dark mb-4">Sayuran Segar Highland</h2>
+          <p class="text-gray-500 text-lg">Dipanen setiap pagi dari mitra tani dataran tinggi. Telah melalui proses pre-cooling dan sortasi ketat agar bebas ulat serta defect daun.</p>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="bg-white border border-gray-200/80 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] reveal group flex flex-col h-full">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-100">
+            <img src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=600&q=80" alt="Selada Keriting" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-brand-green/95 text-white text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest backdrop-blur-sm">Hidroponik</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Selada Keriting</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: VEG-SLD-01</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Metode tanam Hidroponik NFT</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Visual daun hijau segar, renyah</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kemasan Polybag perforated 250g</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200/80 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] reveal group flex flex-col h-full" style="transition-delay: 100ms;">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-100">
+            <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=600&q=80" alt="Brokoli Premium" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-brand-green/95 text-white text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest backdrop-blur-sm">Highland</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Brokoli Premium</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: VEG-BRC-02</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kalibrasi: Diameter 10-15cm</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kuntum padat, hijau tua pekat</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Trimmed (batang dipotong rapi)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200/80 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] reveal group flex flex-col h-full" style="transition-delay: 200ms;">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-100">
+            <img src="https://images.unsplash.com/photo-1592434805445-08104fb469ce?w=600&q=80" alt="Tomat Beef" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-brand-green/95 text-white text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest backdrop-blur-sm">Premium A</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Tomat Beef</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: VEG-TMT-03</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kalibrasi: 3-5 pcs per kg</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kematangan: Merah 80% (Firm)</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kemasan Keranjang Plastik 10kg</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200/80 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] reveal group flex flex-col h-full" style="transition-delay: 300ms;">
+          <div class="relative h-56 w-full overflow-hidden bg-gray-100">
+            <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=600&q=80" alt="Paprika Trio" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-brand-green/95 text-white text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest backdrop-blur-sm">Highland</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow bg-white">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Paprika Trio</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-5">SKU: VEG-PPR-04</p>
+            <ul class="text-sm text-gray-500 space-y-3 flex-grow">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Varian Merah, Kuning, dan Hijau</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Kalibrasi Seragam: 150-250 gr/pcs</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                <span class="leading-tight">Dikemas aman dalam Karton 5kg</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="katalog-bumbu" class="py-24 bg-brand-softGreen border-y border-brand-green/10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      
+      <div class="mb-16 text-center reveal">
+        <span class="text-brand-orange font-display font-bold text-sm tracking-widest uppercase block mb-3">03. Kategori Esensial</span>
+        <h2 class="font-display text-4xl font-black text-brand-dark mb-4">Bumbu Dapur & Garnish</h2>
+        <div class="h-1 w-20 bg-brand-green mx-auto rounded-full mb-6"></div>
+        <p class="text-gray-500 text-lg max-w-2xl mx-auto">Kebutuhan esensial dapur komersial Anda. Rempah dan bumbu dasar yang telah dikeringkan atau dibersihkan sesuai standar GMP.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="bg-white border border-brand-green/10 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] reveal group flex flex-col h-full">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=600&q=80" alt="Bawang Merah Brebes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Rempah Dasar</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Bawang Merah Brebes</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-4">SKU: SPC-ONN-01</p>
+            <p class="text-sm text-gray-500 leading-relaxed">Kering jemur optimal, ukuran sedang-besar, bebas busuk dan telah disortir manual.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-brand-green/10 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] reveal group flex flex-col h-full" style="transition-delay: 100ms;">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?w=600&q=80" alt="Bawang Putih Kating" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Rempah Dasar</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Bawang Putih Kating</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-4">SKU: SPC-GAR-02</p>
+            <p class="text-sm text-gray-500 leading-relaxed">Aroma lebih kuat, siung besar dan bersih. Tersedia dalam kemasan karung mesh 20kg.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-brand-green/10 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] reveal group flex flex-col h-full" style="transition-delay: 200ms;">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&q=80" alt="Jahe Gajah" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Rimpang</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Jahe Gajah Segar</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-4">SKU: SPC-GNG-03</p>
+            <p class="text-sm text-gray-500 leading-relaxed">Rimpang utuh besar, telah dicuci bersih (washed), kadar air optimal untuk ekstraksi.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-brand-green/10 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,90,39,0.08)] reveal group flex flex-col h-full" style="transition-delay: 300ms;">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=600&q=80" alt="Daun Mint" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute top-4 right-4 bg-white/95 text-brand-green text-[10px] font-black px-3 py-1.5 rounded-md shadow-sm uppercase tracking-widest">Garnish</div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <h3 class="font-display font-bold text-xl text-brand-dark mb-1 group-hover:text-brand-green transition-colors">Daun Mint Premium</h3>
+            <p class="text-xs text-brand-orange font-bold tracking-widest mb-4">SKU: HRB-MNT-04</p>
+            <p class="text-sm text-gray-500 leading-relaxed">Khusus untuk kebutuhan mixology dan pastry. Daun lebar, warna pekat, dan sangat aromatik.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-white relative overflow-hidden border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center reveal">
+      <span class="text-brand-orange font-display font-bold text-sm tracking-widest uppercase block mb-3">Quality Control</span>
+      <h2 class="font-display text-3xl md:text-4xl font-black text-brand-dark mb-16">Standar Rantai Pasok B2B</h2>
+      
+      <div class="relative flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-6 z-10">
+        
+        <div class="hidden lg:block absolute top-10 left-20 right-20 h-0.5 bg-gradient-to-r from-brand-green/0 via-brand-green/30 to-brand-green/0 -z-10"></div>
+
+        <div class="flex-1 flex flex-col items-center w-full group">
+          <div class="w-20 h-20 bg-white border-2 border-gray-200 text-gray-400 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-brand-green group-hover:bg-brand-green group-hover:text-white group-hover:shadow-lg transition-all duration-300">
+            <i data-lucide="map" class="w-8 h-8"></i>
+          </div>
+          <h4 class="font-display font-bold text-xl text-brand-dark mb-3">1. Farm Sourcing</h4>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs text-center">Edukasi agronomi dan pemilihan lahan panen bersama mitra tani sesuai standar GAP.</p>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center w-full group">
+          <div class="w-20 h-20 bg-white border-2 border-gray-200 text-gray-400 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-brand-orange group-hover:bg-brand-orange group-hover:text-white group-hover:shadow-lg transition-all duration-300">
+            <i data-lucide="check-square" class="w-8 h-8"></i>
+          </div>
+          <h4 class="font-display font-bold text-xl text-brand-dark mb-3">2. QC Intake</h4>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs text-center">Sortasi visual berlapis dan pengukuran kalibrasi ketat saat tiba di fasilitas DC kami.</p>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center w-full group">
+          <div class="w-20 h-20 bg-white border-2 border-gray-200 text-gray-400 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-brand-green group-hover:bg-brand-green group-hover:text-white group-hover:shadow-lg transition-all duration-300">
+            <i data-lucide="droplets" class="w-8 h-8"></i>
+          </div>
+          <h4 class="font-display font-bold text-xl text-brand-dark mb-3">3. Washing & Packing</h4>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs text-center">Pembersihan dan pengemasan food-grade higienis di ruangan bersuhu terkontrol.</p>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center w-full group">
+          <div class="w-20 h-20 bg-white border-2 border-gray-200 text-gray-400 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-brand-orange group-hover:bg-brand-orange group-hover:text-white group-hover:shadow-lg transition-all duration-300">
+            <i data-lucide="truck" class="w-8 h-8"></i>
+          </div>
+          <h4 class="font-display font-bold text-xl text-brand-dark mb-3">4. Cold Delivery</h4>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs text-center">Distribusi terjadwal menggunakan armada cold fleet (berpendingin) langsung ke fasilitas client.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="kemitraan" class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-display text-3xl md:text-4xl font-black text-brand-dark mb-4">Skema Kemitraan Korporat</h2>
+        <p class="text-gray-500 text-lg max-w-2xl mx-auto">Kami merancang skema kerja sama fleksibel untuk menyesuaikan dengan skala operasional dan sistem pembayaran perusahaan Anda.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 items-center">
+        
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm reveal">
+          <h3 class="font-display font-bold text-2xl text-brand-dark mb-2">Retail Starter</h3>
+          <p class="text-gray-500 text-sm mb-6 h-10">Cocok untuk kafe, resto tunggal, atau supermarket independen.</p>
+          <div class="text-4xl font-black text-brand-dark mb-6">
+            MOQ <span class="text-2xl text-gray-400 font-medium block mt-1">20 Kg / Pengiriman</span>
+          </div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                Pembayaran Cash on Delivery (COD)
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                Harga fluktuatif mengikuti pasar
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                Pengiriman H+1 setelah PO
+            </li>
+            <li class="flex gap-3 text-sm text-gray-400">
+                <i data-lucide="x" class="w-5 h-5 text-gray-300 shrink-0"></i>
+                Belum mendapat Term of Payment (TOP)
+            </li>
+          </ul>
+          <a href="#" class="block w-full py-3 px-4 bg-gray-50 text-brand-dark font-bold text-center rounded-xl hover:bg-gray-100 border border-gray-200 transition-colors">Hubungi Sales</a>
+        </div>
+
+        <div class="bg-brand-darkGreen rounded-2xl p-8 border-2 border-brand-green shadow-2xl reveal transform md:-translate-y-4 relative">
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-orange text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full">Paling Diminati</div>
+          <h3 class="font-display font-bold text-2xl text-white mb-2">Corporate F&B</h3>
+          <p class="text-white/70 text-sm mb-6 h-10">Standar untuk jaringan restoran, hotel, dan catering industri.</p>
+          <div class="text-4xl font-black text-white mb-6">
+            MOQ <span class="text-2xl text-brand-orange font-medium block mt-1">100 Kg / Pengiriman</span>
+          </div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex gap-3 text-sm text-white/90">
+                <i data-lucide="check" class="w-5 h-5 text-brand-orange shrink-0"></i>
+                Term of Payment (TOP) 14-30 Hari
+            </li>
+            <li class="flex gap-3 text-sm text-white/90">
+                <i data-lucide="check" class="w-5 h-5 text-brand-orange shrink-0"></i>
+                Kontrak harga terkunci per 1 Bulan
+            </li>
+            <li class="flex gap-3 text-sm text-white/90">
+                <i data-lucide="check" class="w-5 h-5 text-brand-orange shrink-0"></i>
+                Gratis Biaya Pengiriman (Cold Fleet)
+            </li>
+            <li class="flex gap-3 text-sm text-white/90">
+                <i data-lucide="check" class="w-5 h-5 text-brand-orange shrink-0"></i>
+                Garansi Retur Barang 100% (SLA ketat)
+            </li>
+          </ul>
+          <a href="#" class="block w-full py-3 px-4 bg-brand-orange text-white font-bold text-center rounded-xl hover:bg-orange-600 shadow-[0_10px_20px_rgba(242,153,74,0.2)] transition-colors">Daftar Vendor B2B</a>
+        </div>
+
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm reveal">
+          <h3 class="font-display font-bold text-2xl text-brand-dark mb-2">Enterprise</h3>
+          <p class="text-gray-500 text-sm mb-6 h-10">Untuk pabrik pengolahan makanan atau ritel modern nasional.</p>
+          <div class="text-4xl font-black text-brand-dark mb-6">
+            Kontrak <span class="text-2xl text-gray-400 font-medium block mt-1">Sesuai Kapasitas</span>
+          </div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                TOP hingga 45-60 Hari Kerja
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                Kontrak penanaman khusus di lahan
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                Dedicated Account Manager 24/7
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <i data-lucide="check" class="w-5 h-5 text-brand-green shrink-0"></i>
+                Custom Packaging berlogo perusahaan
+            </li>
+          </ul>
+          <a href="#" class="block w-full py-3 px-4 bg-gray-50 text-brand-dark font-bold text-center rounded-xl hover:bg-gray-100 border border-gray-200 transition-colors">Jadwalkan Meeting</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="py-24 bg-white border-t border-gray-100">
+    <div class="max-w-4xl mx-auto px-6 lg:px-12">
+      
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-display text-3xl md:text-4xl font-black text-brand-dark mb-4">Pusat Bantuan & Regulasi</h2>
+        <p class="text-gray-500 text-lg">Pertanyaan yang sering diajukan oleh calon mitra korporasi terkait logistik dan kualitas.</p>
+      </div>
+
+      <div class="space-y-4 reveal">
+        
+        <div class="faq-item border border-gray-200 rounded-2xl overflow-hidden bg-gray-50/50">
+          <button class="faq-button w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleFaq(this.parentElement)">
+            <span class="font-display font-bold text-brand-dark text-lg pr-4">Apakah harga di UD NIMARS sudah termasuk PPN?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-6 h-6 text-brand-green shrink-0"></i>
+          </button>
+          <div class="faq-answer px-6 text-gray-600 leading-relaxed bg-white border-t border-gray-100">
+            Sebagai perusahaan berbentuk UD (Usaha Dagang) yang terdaftar resmi, UD NIMARS dapat menerbitkan Faktur Pajak. Sesuai regulasi perpajakan yang berlaku untuk produk pertanian (komoditas segar), sebagian besar barang kami bersifat **Bebas PPN**. Namun, jika ada komponen biaya jasa logistik, akan dikenakan PPN sesuai tarif yang berlaku.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gray-200 rounded-2xl overflow-hidden bg-gray-50/50">
+          <button class="faq-button w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleFaq(this.parentElement)">
+            <span class="font-display font-bold text-brand-dark text-lg pr-4">Bagaimana jika ada barang reject saat penerimaan?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-6 h-6 text-brand-green shrink-0"></i>
+          </button>
+          <div class="faq-answer px-6 text-gray-600 leading-relaxed bg-white border-t border-gray-100">
+            Kami menerapkan kebijakan **Replacement Guarantee**. Tim penerimaan (Receiving/QC) di fasilitas Anda berhak menyortir dan menolak komoditas yang tidak sesuai dengan standar spek yang disepakati. Silakan potong nota pada saat itu juga, dan barang pengganti akan kami kirimkan pada *batch* pengiriman hari berikutnya (H+1) tanpa tambahan biaya kirim.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gray-200 rounded-2xl overflow-hidden bg-gray-50/50">
+          <button class="faq-button w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleFaq(this.parentElement)">
+            <span class="font-display font-bold text-brand-dark text-lg pr-4">Apakah melayani pengiriman ke luar Jabodetabek?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-6 h-6 text-brand-green shrink-0"></i>
+          </button>
+          <div class="faq-answer px-6 text-gray-600 leading-relaxed bg-white border-t border-gray-100">
+            Fokus utama layanan *cold fleet* reguler kami saat ini adalah area Jakarta, Bogor, Depok, Tangerang, dan Bekasi. Namun, untuk klien tingkat Enterprise dengan volume tonase tertentu per minggu, kami dapat melayani pengiriman lintas pulau atau ke kota besar lain (misal: Bandung, Surabaya, Bali) melalui mitra logistik pihak ketiga (3PL) yang tersertifikasi *cold chain*.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gray-200 rounded-2xl overflow-hidden bg-gray-50/50">
+          <button class="faq-button w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleFaq(this.parentElement)">
+            <span class="font-display font-bold text-brand-dark text-lg pr-4">Syarat apa saja untuk mendapatkan fasilitas Term of Payment (TOP)?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-6 h-6 text-brand-green shrink-0"></i>
+          </button>
+          <div class="faq-answer px-6 text-gray-600 leading-relaxed bg-white border-t border-gray-100">
+            Fasilitas TOP (pembayaran mundur) diberikan setelah melalui proses verifikasi dari tim *Finance* kami. Dokumen dasar yang dibutuhkan antara lain: Profil Perusahaan, NIB, NPWP Perusahaan, serta KTP Direktur. Evaluasi *credit limit* akan memakan waktu 3-5 hari kerja. Selama masa evaluasi, klien harus melakukan transaksi dengan sistem COD.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-[#020617] text-white pt-24 pb-12 border-t-8 border-[#2D5A27]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-14 mb-20">
+        
+        <div class="lg:col-span-4 pr-6">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 rounded-2xl bg-[#2D5A27] flex items-center justify-center border border-white/10">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            <span class="font-display font-black text-2xl tracking-wide">UD NIMARS</span>
+          </div>
+          <p class="text-gray-400 text-base leading-relaxed mb-8">
+            Infrastruktur pasokan segar premium B2B terintegrasi tingkat tinggi. Menghubungkan potensi ladang agrikultur nusantara dengan eksekutif kuliner di seluruh Indonesia.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 lg:col-start-6">
+          <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Pintas</h4>
+          <ul class="space-y-4">
+            <li><a href="about.html" class="text-gray-400 hover:text-white text-base transition-colors">Tentang Kami</a></li>
+            <li><a href="produk.html" class="text-gray-400 hover:text-white text-base transition-colors">Produk</a></li>
+            <li><a href="team.html" class="text-gray-400 hover:text-white text-base transition-colors">Tim Kami</a></li>
+            <li><a href="kontak.html" class="text-gray-400 hover:text-white text-base transition-colors">Kontak Kami</a></li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-4">
+          <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Katalog & Insight</h4>
+          <p class="text-gray-400 text-base mb-6 leading-relaxed">Dapatkan update pergerakan tren harga komoditas dan *price list* bulanan langsung ke email dashboard procurement Anda.</p>
+          <div class="flex h-14">
+            <input type="email" placeholder="Email Corporate Address" class="bg-white/5 border border-white/20 border-r-0 rounded-l-2xl px-6 w-full text-base outline-none focus:border-[#F2994A] text-white placeholder-gray-500 transition-colors cursor-text">
+            <button class="bg-[#F2994A] hover:bg-orange-600 px-8 rounded-r-2xl font-bold text-base transition-colors cursor-pointer">Subscribe</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500">
+        <p>&copy; 2026 UD NIMARS. All rights reserved.</p>
+        <div class="flex gap-8">
+          <a href="#" class="hover:text-white transition-colors cursor-pointer">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors cursor-pointer">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors cursor-pointer">Cookie Settings</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- Initialize Lucide Icons (Untuk icon bawaan produk.html) ---
+    lucide.createIcons();
+
+    // --- Header Scroll Effect & Progress Bar ---
+    const header = document.getElementById('floating-header');
+    const progressBar = document.getElementById('scroll-progress');
+
+    window.addEventListener('scroll', () => {
+      // Toggle shadow and background logic for fixed header
+      if (window.scrollY > 20) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      // Calculate Reading Progress Bar
+      const totalScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollValue = `${(totalScroll / windowHeight) * 100}%`;
+      progressBar.style.width = scrollValue;
+    });
+
+    // --- Mobile Menu Logic (Menggunakan GSAP yang dimuat di head) ---
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden'); 
+      mobileMenu.classList.add('flex');
+      gsap.fromTo(mobileMenu, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+    });
+
+    document.getElementById('close-mobile').addEventListener('click', () => {
+      gsap.to(mobileMenu, { opacity: 0, duration: 0.3, onComplete: () => {
+        mobileMenu.classList.add('hidden'); 
+        mobileMenu.classList.remove('flex');
+      }});
+    });
+
+    // --- Smooth Scroll Setup (Lenis) ---
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // --- Native CSS Reveal Animation (Intersection Observer) ---
+    document.addEventListener("DOMContentLoaded", function() {
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 // Memunculkan elemen ketika 15% terlihat di viewport
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            observer.unobserve(entry.target); // Animasi hanya berjalan satu kali
+          }
+        });
+      }, observerOptions);
+
+      const revealElements = document.querySelectorAll('.reveal');
+      revealElements.forEach(el => observer.observe(el));
+    });
+
+    // --- FAQ Accordion Logic ---
+    function toggleFaq(element) {
+      const allFaqs = document.querySelectorAll('.faq-item');
+      allFaqs.forEach(faq => {
+        if(faq !== element) {
+          faq.classList.remove('active');
+        }
+      });
+      element.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

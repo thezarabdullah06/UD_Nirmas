@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tim Kami — UD NIMARS | Premium B2B Supply</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              primary: '#2D5A27',    
+              secondary: '#F2994A',  
+              neutral: '#333333',    
+              base: '#F9FAFB',       
+              cta: '#E67E22',        
+              'primary-light': 'rgba(45, 90, 39, 0.08)',
+              'secondary-light': 'rgba(242, 153, 74, 0.1)',
+            }
+          },
+          boxShadow: {
+            'glass': '0 8px 32px 0 rgba(45, 90, 39, 0.05)',
+            'premium': '0 20px 40px -15px rgba(45, 90, 39, 0.15)',
+            'card': '0 10px 30px -5px rgba(51, 51, 51, 0.06)',
+          },
+          animation: {
+            'marquee': 'marquee 30s linear infinite',
+            'blob': 'blob 10s infinite',
+          },
+          keyframes: {
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-100%)' },
+            },
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            }
+          }
+        },
+      },
+    };
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .bg-pattern-dots {
+        background-image: radial-gradient(rgba(45, 90, 39, 0.1) 1px, transparent 1px);
+        background-size: 24px 24px;
+      }
+      .bg-pattern-grid {
+        background-size: 40px 40px;
+        background-image: 
+          linear-gradient(to right, rgba(45, 90, 39, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(45, 90, 39, 0.05) 1px, transparent 1px);
+      }
+      .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-[#4A7C43];
+      }
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    }
+    
+    body { 
+      background-color: #F9FAFB;
+      color: #333333;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================================================
+       02. FLOATING CAPSULE HEADER (WHITE BACKGROUND)
+       ========================================================================== */
+    #floating-header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 95%;
+      max-width: 1400px;
+      border-radius: 100px;
+      /* Background putih solid dengan shadow agar terlihat melayang di atas konten putih */
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #floating-header.scrolled {
+      top: 16px;
+      box-shadow: 0 15px 40px rgba(45, 90, 39, 0.12);
+    }
+    
+    .header-left { display: flex; align-items: center; flex: 1; justify-content: flex-end; padding-right: 2rem; }
+    .header-center { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .header-right { display: flex; align-items: center; flex: 1; justify-content: flex-start; padding-left: 2rem; }
+    .nav-links-container { display: flex; align-items: center; gap: 2.5rem; }
+    
+    .logo-container { display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease; }
+    .logo-container:hover { transform: scale(1.1); }
+    
+    .nav-link { 
+      font-family: 'Montserrat', sans-serif; 
+      font-size: 0.85rem; 
+      font-weight: 700; 
+      color: #0e2a0b; /* Teks Permanen Gelap */
+      text-transform: uppercase; 
+      letter-spacing: 0.08em; 
+      text-decoration: none; 
+      position: relative; 
+      padding: 8px 0; 
+      transition: color 0.3s ease; 
+    }
+    .nav-link::after { 
+      content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px; 
+      background: #F2994A; transform: translateX(-50%); transition: width 0.3s ease; border-radius: 2px; 
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #F2994A !important; }
+    
+    @media (max-width: 1024px) {
+      #floating-header { width: 95%; padding: 10px 20px; }
+      .hidden-mobile { display: none !important; }
+      .header-left, .header-right { padding: 0; justify-content: flex-end; flex: unset;}
+      .header-center { flex: 1; justify-content: flex-start; }
+      .mobile-menu-btn { display: flex !important; color: #0e2a0b !important; }
+    }
+
+    /* Scroll Progress */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 4px;
+      background: linear-gradient(90deg, #2D5A27, #F2994A);
+      z-index: 101; width: 0%; transition: width 0.1s linear;
+    }
+
+    /* Preloader Styles */
+    #preloader {
+      position: fixed; inset: 0; background: #F9FAFB; z-index: 10000;
+      display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+    }
+
+    /* Accordion */
+    .accordion-content {
+      transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+      max-height: 0; opacity: 0; overflow: hidden;
+    }
+    .accordion-item.active .accordion-content { max-height: 300px; opacity: 1; }
+    .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+    
+    .animation-delay-2000 { animation-delay: 2s; }
+  </style>
+</head>
+
+<body class="font-body antialiased selection:bg-brand-primary selection:text-white relative">
+
+  <div id="preloader">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-4 border-brand-primary-light border-t-brand-primary rounded-full animate-spin mb-4"></div>
+      <p class="font-heading font-bold text-brand-primary tracking-widest uppercase text-sm animate-pulse">Memuat NIMARS...</p>
+    </div>
+  </div>
+  
+  <div id="scroll-progress"></div>
+
+  <nav id="floating-header">
+    <div class="header-left">
+      <div class="nav-links-container hidden-mobile">
+        <a href="about.html" class="nav-link">Tentang Kami</a>
+        <a href="produk.html" class="nav-link">Produk</a>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <a href="index.html" class="logo-container" title="Beranda UD NIMARS">
+        <svg width="52" height="52" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 5C25.147 5 5 25.147 5 50C5 74.853 25.147 95 50 95C74.853 95 95 74.853 95 50C95 25.147 74.853 5 50 5Z" fill="#2D5A27"/>
+          <path d="M95 50C95 25.147 74.853 5 50 5V95C74.853 95 95 74.853 95 50Z" fill="#1A3317"/>
+          <path d="M50 85V40" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50 65C35 65 25 50 25 50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50 55C65 55 75 40 75 40" stroke="#F2994A" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="50" cy="25" r="8" fill="#F2994A"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <div class="nav-links-container hidden-mobile">
+        <a href="team.html" class="nav-link">Tim Kami</a>
+        <a href="kontak.html" class="nav-link">Kontak Kami</a>
+      </div>
+      <button class="mobile-menu-btn hidden items-center justify-center p-2 text-[#0e2a0b]" id="menu-toggle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-[#0e2a0b]/95 z-[200] hidden flex-col items-center justify-center gap-8 backdrop-blur-2xl">
+    <a href="index.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Home</a>
+    <a href="about.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Tentang Kami</a>
+    <a href="produk.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Produk</a>
+    <a href="team.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Tim Kami</a>
+    <a href="kontak.html" class="text-white text-3xl font-display font-black hover:text-[#F2994A] transition-colors">Kontak Kami</a>
+    
+    <button id="close-mobile" class="mt-10 p-4 text-white/50 hover:text-[#F2994A] bg-white/5 rounded-full border border-white/10">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <section class="relative min-h-[90vh] flex items-center pt-32 pb-24 overflow-hidden bg-brand-primary">
+    <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&q=80')] bg-cover bg-center mix-blend-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary/95 to-[#1A3A17]"></div>
+
+    <div class="container mx-auto px-6 lg:px-16 relative z-10">
+      <div class="max-w-4xl mx-auto text-center hero-anim">
+        
+        <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white mb-8 shadow-lg">
+          <i data-lucide="shield-check" class="w-4 h-4 text-brand-secondary"></i>
+          <span class="font-heading text-xs font-bold tracking-widest uppercase">Tim Profesional NIMARS</span>
+        </div>
+
+        <h1 class="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-8">
+          <span>Tim Profesional di Balik</span><br/>
+          <span class="text-brand-secondary">Kualitas UD NIMARS</span>
+        </h1>
+
+        <p class="font-body text-lg md:text-xl text-white/80 leading-relaxed mb-12 max-w-3xl mx-auto">
+          Di balik setiap produk segar yang sampai ke tangan klien, terdapat tim UD NIMARS yang bekerja dengan dedikasi tinggi dan standar operasional yang konsisten. Kami adalah partner yang memahami pentingnya kualitas, ketepatan waktu, dan keandalan operasional bisnis Anda.
+        </p>
+
+        <div class="flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
+          <a href="#anggota-tim" class="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-brand-secondary text-white font-heading font-bold rounded-full transition-all duration-300 shadow-[0_10px_30px_rgba(242,153,74,0.3)] hover:-translate-y-1 hover:bg-[#E67E22]">
+            <span>Kenali Tim Kami</span>
+            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+          <button onclick="openModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-transparent border-2 border-white/30 text-white hover:border-white hover:bg-white/10 font-heading font-bold rounded-full transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
+            <span>Hubungi Kami</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-20 max-w-5xl mx-auto bg-white/10 backdrop-blur-lg border border-white/20 rounded-[2rem] p-6 md:p-10 shadow-2xl hero-anim flex justify-around items-center flex-wrap gap-y-8 relative z-20">
+        <div class="text-center w-1/2 md:w-auto">
+          <p class="font-heading text-4xl md:text-5xl font-black text-white mb-2">12+</p>
+          <p class="text-xs font-bold text-white/60 uppercase tracking-widest">Tahun Beroperasi</p>
+        </div>
+        <div class="hidden md:block w-px h-16 bg-white/20"></div>
+        <div class="text-center w-1/2 md:w-auto">
+          <p class="font-heading text-4xl md:text-5xl font-black text-brand-secondary mb-2">200+</p>
+          <p class="text-xs font-bold text-white/60 uppercase tracking-widest">Klien B2B</p>
+        </div>
+        <div class="hidden md:block w-px h-16 bg-white/20"></div>
+        <div class="text-center w-1/2 md:w-auto">
+          <p class="font-heading text-4xl md:text-5xl font-black text-white mb-2">50+</p>
+          <p class="text-xs font-bold text-white/60 uppercase tracking-widest">Varietas Produk</p>
+        </div>
+        <div class="hidden md:block w-px h-16 bg-white/20"></div>
+        <div class="text-center w-1/2 md:w-auto">
+          <p class="font-heading text-4xl md:text-5xl font-black text-brand-secondary mb-2">98%</p>
+          <p class="text-xs font-bold text-white/60 uppercase tracking-widest">On-Time Delivery</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+      <svg class="relative block w-full h-[60px] md:h-[120px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,119.29,193.3,109.11,236.4,102.21,279.16,81.42,321.39,56.44Z" fill="#F9FAFB"></path>
+      </svg>
+    </div>
+  </section>
+
+  <section class="py-12 bg-brand-base relative overflow-hidden flex flex-col items-center">
+    <p class="font-heading text-xs font-bold text-brand-neutral/50 uppercase tracking-widest mb-8">Dipercaya oleh Ekosistem HORECA Terbaik</p>
+    <div class="relative w-full flex overflow-hidden">
+      <div class="absolute top-0 left-0 w-24 md:w-48 h-full bg-gradient-to-r from-brand-base to-transparent z-10"></div>
+      <div class="absolute top-0 right-0 w-24 md:w-48 h-full bg-gradient-to-l from-brand-base to-transparent z-10"></div>
+      
+      <div class="flex animate-marquee whitespace-nowrap items-center gap-16 md:gap-24 px-10">
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-primary transition-colors cursor-pointer">GRAND HOTEL</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-secondary transition-colors cursor-pointer">FRESHMART</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-primary transition-colors cursor-pointer">BISTRO CO.</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-secondary transition-colors cursor-pointer">NUSA RESTO</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-primary transition-colors cursor-pointer">CAFE DELIGHT</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-primary transition-colors cursor-pointer">GRAND HOTEL</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-secondary transition-colors cursor-pointer">FRESHMART</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-primary transition-colors cursor-pointer">BISTRO CO.</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-secondary transition-colors cursor-pointer">NUSA RESTO</div>
+        <div class="font-heading text-2xl font-black text-brand-neutral/20 hover:text-brand-primary transition-colors cursor-pointer">CAFE DELIGHT</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 relative bg-brand-base">
+    <div class="absolute inset-0 bg-pattern-grid pointer-events-none"></div>
+
+    <div class="container mx-auto px-6 lg:px-16 relative z-10">
+      <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+        <h2 class="font-heading text-3xl md:text-4xl font-extrabold text-brand-neutral mb-4">Fondasi Layanan Kami</h2>
+        <p class="font-body text-brand-neutral/60 text-lg">Kualitas berawal dari dedikasi dan keahlian orang-orang di baliknya.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="group bg-white rounded-[2rem] p-8 border border-gray-100 shadow-card hover:shadow-premium transition-all duration-300 hover:-translate-y-2 relative overflow-hidden fade-up">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-primary-light rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+          <div class="w-16 h-16 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6">
+            <i data-lucide="briefcase" class="w-8 h-8 text-brand-primary"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-brand-neutral mb-3">Profesional</h3>
+          <p class="text-brand-neutral/60 text-sm leading-relaxed">Sistem terstruktur dan standar operasional yang memastikan efisiensi di setiap alur kerja B2B.</p>
+        </div>
+
+        <div class="group bg-white rounded-[2rem] p-8 border border-gray-100 shadow-card hover:shadow-premium transition-all duration-300 hover:-translate-y-2 relative overflow-hidden fade-up" style="transition-delay: 100ms;">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-secondary-light rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+          <div class="w-16 h-16 rounded-2xl bg-brand-secondary/10 flex items-center justify-center mb-6">
+            <i data-lucide="award" class="w-8 h-8 text-brand-secondary"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-brand-neutral mb-3">Kompeten</h3>
+          <p class="text-brand-neutral/60 text-sm leading-relaxed">Pemahaman mendalam tentang agrikultur, rantai pasok (cold-chain), dan manajemen kualitas.</p>
+        </div>
+
+        <div class="group bg-white rounded-[2rem] p-8 border border-gray-100 shadow-card hover:shadow-premium transition-all duration-300 hover:-translate-y-2 relative overflow-hidden fade-up" style="transition-delay: 200ms;">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-primary-light rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+          <div class="w-16 h-16 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6">
+            <i data-lucide="heart-handshake" class="w-8 h-8 text-brand-primary"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-brand-neutral mb-3">Berdedikasi</h3>
+          <p class="text-brand-neutral/60 text-sm leading-relaxed">Berkomitmen menjaga kesegaran produk demi kepuasan dan membangun kepercayaan klien jangka panjang.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="anggota-tim" class="py-24 relative overflow-hidden bg-white border-t border-gray-100">
+    <div class="container mx-auto px-6 lg:px-16 relative z-10">
+      
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 fade-up">
+        <div class="max-w-2xl">
+          <h2 class="font-heading text-4xl md:text-5xl font-extrabold text-brand-neutral leading-tight mb-4">
+            Tim Inti Kami
+          </h2>
+          <div class="w-20 h-1.5 bg-brand-secondary rounded-full"></div>
+        </div>
+        <p class="font-body text-brand-neutral/60 text-lg max-w-md md:text-right">
+          Para ahli dan pimpinan divisi yang memastikan kelancaran rantai pasok dari hulu ke hilir.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="group relative rounded-[2rem] overflow-hidden bg-brand-base border border-gray-100 shadow-sm hover:shadow-premium transition-all duration-500 fade-up">
+          <div class="aspect-[4/5] w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80" alt="Budi Santoso" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+          </div>
+          <div class="p-6 relative bg-white transform -translate-y-4 mx-4 rounded-2xl shadow-card group-hover:-translate-y-6 transition-transform duration-300">
+            <p class="text-brand-primary font-bold text-[10px] uppercase tracking-widest mb-1">Head of Sourcing</p>
+            <h3 class="text-brand-neutral font-heading text-xl font-bold mb-2">Budi Santoso</h3>
+            <p class="text-brand-neutral/60 text-xs line-clamp-2">Spesialis kemitraan petani dan seleksi produk segar.</p>
+          </div>
+        </div>
+
+        <div class="group relative rounded-[2rem] overflow-hidden bg-brand-base border border-gray-100 shadow-sm hover:shadow-premium transition-all duration-500 fade-up" style="transition-delay: 100ms;">
+          <div class="aspect-[4/5] w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80" alt="Rina Wijaya" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+          </div>
+          <div class="p-6 relative bg-white transform -translate-y-4 mx-4 rounded-2xl shadow-card group-hover:-translate-y-6 transition-transform duration-300">
+            <p class="text-brand-secondary font-bold text-[10px] uppercase tracking-widest mb-1">QA Manager</p>
+            <h3 class="text-brand-neutral font-heading text-xl font-bold mb-2">Rina Wijaya</h3>
+            <p class="text-brand-neutral/60 text-xs line-clamp-2">Penjaga kualitas dengan standar inspeksi ketat.</p>
+          </div>
+        </div>
+
+        <div class="group relative rounded-[2rem] overflow-hidden bg-brand-base border border-gray-100 shadow-sm hover:shadow-premium transition-all duration-500 fade-up" style="transition-delay: 200ms;">
+          <div class="aspect-[4/5] w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80" alt="Hendra Pratama" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+          </div>
+          <div class="p-6 relative bg-white transform -translate-y-4 mx-4 rounded-2xl shadow-card group-hover:-translate-y-6 transition-transform duration-300">
+            <p class="text-brand-primary font-bold text-[10px] uppercase tracking-widest mb-1">Supply Chain Dir.</p>
+            <h3 class="text-brand-neutral font-heading text-xl font-bold mb-2">Hendra Pratama</h3>
+            <p class="text-brand-neutral/60 text-xs line-clamp-2">Pakar efisiensi logistik cold-chain B2B.</p>
+          </div>
+        </div>
+
+        <div class="group relative rounded-[2rem] overflow-hidden bg-brand-base border border-gray-100 shadow-sm hover:shadow-premium transition-all duration-500 fade-up" style="transition-delay: 300ms;">
+          <div class="aspect-[4/5] w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&q=80" alt="Sarah Amalia" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+          </div>
+          <div class="p-6 relative bg-white transform -translate-y-4 mx-4 rounded-2xl shadow-card group-hover:-translate-y-6 transition-transform duration-300">
+            <p class="text-brand-secondary font-bold text-[10px] uppercase tracking-widest mb-1">Sales Manager</p>
+            <h3 class="text-brand-neutral font-heading text-xl font-bold mb-2">Sarah Amalia</h3>
+            <p class="text-brand-neutral/60 text-xs line-clamp-2">Jembatan solusi pasokan untuk klien retail dan HORECA.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-brand-base relative overflow-hidden">
+    <div class="absolute top-0 -left-20 w-96 h-96 bg-brand-primary rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob"></div>
+    <div class="absolute bottom-0 -right-20 w-96 h-96 bg-brand-secondary rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-2000"></div>
+    <div class="absolute inset-0 bg-pattern-dots opacity-50 pointer-events-none"></div>
+
+    <div class="container mx-auto px-6 lg:px-16 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        
+        <div class="relative fade-up order-2 lg:order-1">
+          <div class="glass-card p-4 rounded-[2.5rem] relative z-20">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" alt="Meeting" class="w-full h-auto aspect-square md:aspect-[4/3] object-cover rounded-[2rem]" />
+          </div>
+          <div class="absolute -bottom-6 -right-6 md:right-10 bg-brand-primary text-white p-6 rounded-3xl shadow-premium z-30 animate-float-slow">
+            <i data-lucide="check-circle" class="w-8 h-8 mb-2 text-brand-secondary"></i>
+            <p class="font-heading font-bold text-lg">ISO 9001</p>
+            <p class="text-xs opacity-80">Terverifikasi</p>
+          </div>
+        </div>
+
+        <div class="fade-up order-1 lg:order-2 lg:pl-10">
+          <h2 class="font-heading text-4xl lg:text-5xl font-extrabold text-brand-neutral leading-tight mb-6">
+            Kolaborasi yang <span class="text-gradient">Menggerakkan Kualitas</span>
+          </h2>
+          <p class="font-body text-lg text-brand-neutral/70 mb-10 leading-relaxed">
+            Sinergi antar divisi adalah kunci kecepatan kami. Dari sourcing yang selektif hingga distribusi logistik yang akurat, tim kami bekerja dalam satu ritme untuk memberikan ketenangan pikiran bagi bisnis Anda.
+          </p>
+          
+          <div class="space-y-6">
+            <div class="flex gap-5 items-start">
+              <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center shrink-0 mt-1">
+                <i data-lucide="layers" class="w-5 h-5 text-brand-primary"></i>
+              </div>
+              <div>
+                <h4 class="font-heading font-bold text-brand-neutral mb-1 text-lg">Sistem Terstruktur</h4>
+                <p class="text-brand-neutral/60 text-sm leading-relaxed">Operasional didukung oleh SOP B2B yang ketat dan terverifikasi untuk meminimalkan human error.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-5 items-start">
+              <div class="w-12 h-12 rounded-full bg-brand-secondary/10 flex items-center justify-center shrink-0 mt-1">
+                <i data-lucide="clock" class="w-5 h-5 text-brand-secondary"></i>
+              </div>
+              <div>
+                <h4 class="font-heading font-bold text-brand-neutral mb-1 text-lg">Responsif 24/7</h4>
+                <p class="text-brand-neutral/60 text-sm leading-relaxed">Tim siaga menanggapi kebutuhan pasokan mendadak atau penyesuaian kuantitas dari klien.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-5 items-start">
+              <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center shrink-0 mt-1">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-brand-primary"></i>
+              </div>
+              <div>
+                <h4 class="font-heading font-bold text-brand-neutral mb-1 text-lg">Pengembangan Berkelanjutan</h4>
+                <p class="text-brand-neutral/60 text-sm leading-relaxed">Pelatihan tim rutin mengenai penanganan pascapanen dan standar higienitas industri terkini.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-white relative border-t border-gray-100">
+    <div class="container mx-auto px-6 lg:px-16 relative z-10">
+      <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+        <h2 class="font-heading text-3xl md:text-4xl font-extrabold text-brand-neutral mb-4">Jejak Perjalanan Kami</h2>
+        <p class="font-body text-brand-neutral/60 text-lg">Evolusi dari pemasok lokal menjadi partner rantai pasok B2B terpercaya.</p>
+      </div>
+
+      <div class="relative max-w-4xl mx-auto">
+        <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 md:-translate-x-1/2"></div>
+        
+        <div class="space-y-12">
+          <div class="relative flex flex-col md:flex-row items-start justify-between w-full fade-up">
+            <div class="md:w-5/12 ml-12 md:ml-0 md:text-right md:pr-12">
+              <h3 class="font-heading text-3xl font-black text-brand-primary/20 mb-2">2012</h3>
+              <h4 class="font-heading text-lg font-bold text-brand-neutral mb-2">Awal Mula UD NIMARS</h4>
+              <p class="text-brand-neutral/60 text-sm leading-relaxed">Dimulai dari sebuah gudang kecil, melayani pasar tradisional dan beberapa restoran lokal di Jakarta.</p>
+            </div>
+            <div class="absolute left-0 md:left-1/2 w-8 h-8 rounded-full bg-white border-4 border-brand-primary md:-translate-x-1/2 z-10 shadow-md"></div>
+            <div class="md:w-5/12"></div>
+          </div>
+
+          <div class="relative flex flex-col md:flex-row items-start justify-between w-full fade-up">
+            <div class="md:w-5/12 hidden md:block"></div>
+            <div class="absolute left-0 md:left-1/2 w-8 h-8 rounded-full bg-white border-4 border-brand-secondary md:-translate-x-1/2 z-10 shadow-md"></div>
+            <div class="md:w-5/12 ml-12 md:ml-0 md:pl-12">
+              <h3 class="font-heading text-3xl font-black text-brand-secondary/30 mb-2">2016</h3>
+              <h4 class="font-heading text-lg font-bold text-brand-neutral mb-2">Ekspansi B2B HORECA</h4>
+              <p class="text-brand-neutral/60 text-sm leading-relaxed">Membentuk tim Sourcing khusus dan menerapkan standar QA pertama untuk menembus pasar Hotel berbintang.</p>
+            </div>
+          </div>
+
+          <div class="relative flex flex-col md:flex-row items-start justify-between w-full fade-up">
+            <div class="md:w-5/12 ml-12 md:ml-0 md:text-right md:pr-12">
+              <h3 class="font-heading text-3xl font-black text-brand-primary/20 mb-2">2020</h3>
+              <h4 class="font-heading text-lg font-bold text-brand-neutral mb-2">Digitalisasi & Cold Chain</h4>
+              <p class="text-brand-neutral/60 text-sm leading-relaxed">Membangun fasilitas Cold-Storage dan mendigitalisasi sistem pemesanan B2B.</p>
+            </div>
+            <div class="absolute left-0 md:left-1/2 w-8 h-8 rounded-full bg-white border-4 border-brand-primary md:-translate-x-1/2 z-10 shadow-md"></div>
+            <div class="md:w-5/12"></div>
+          </div>
+
+          <div class="relative flex flex-col md:flex-row items-start justify-between w-full fade-up">
+            <div class="md:w-5/12 hidden md:block"></div>
+            <div class="absolute left-0 md:left-1/2 w-10 h-10 rounded-full bg-brand-cta border-4 border-white md:-translate-x-1/2 z-10 shadow-[0_0_15px_rgba(230,126,34,0.5)] flex justify-center items-center">
+              <i data-lucide="star" class="w-4 h-4 text-white fill-white"></i>
+            </div>
+            <div class="md:w-5/12 ml-12 md:ml-0 md:pl-12 pt-1">
+              <h3 class="font-heading text-3xl font-black text-brand-cta mb-2">Sekarang</h3>
+              <h4 class="font-heading text-lg font-bold text-brand-neutral mb-2">Menjadi Market Leader</h4>
+              <p class="text-brand-neutral/60 text-sm leading-relaxed">Dipercaya ratusan partner retail dan HORECA sebagai fondasi logistik bisnis segar mereka.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-brand-base relative">
+    <div class="container mx-auto px-6 lg:px-16 max-w-4xl">
+      <div class="text-center mb-16 fade-up">
+        <h2 class="font-heading text-3xl md:text-4xl font-extrabold text-brand-neutral mb-4">Pertanyaan Umum</h2>
+        <p class="font-body text-brand-neutral/60 text-lg">Hal yang sering ditanyakan seputar layanan dan tim kami.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="accordion-item glass-card rounded-2xl overflow-hidden fade-up">
+          <button class="w-full px-6 py-5 flex justify-between items-center bg-white/50 hover:bg-white transition-colors focus:outline-none" onclick="toggleAccordion(this)">
+            <span class="font-heading font-bold text-brand-neutral text-left">Apakah UD NIMARS menerima klien di luar Jakarta?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-primary accordion-icon transition-transform duration-300 shrink-0"></i>
+          </button>
+          <div class="accordion-content bg-white/30 backdrop-blur-sm border-t border-gray-100/50">
+            <p class="px-6 pb-5 pt-4 text-brand-neutral/60 text-sm leading-relaxed">Saat ini logistik kami fokus melayani pengiriman area Jabodetabek dan beberapa kota di Jawa Barat untuk menjaga kualitas kesegaran maksimal. Hubungi Sales untuk detail area cover.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item glass-card rounded-2xl overflow-hidden fade-up" style="transition-delay: 100ms;">
+          <button class="w-full px-6 py-5 flex justify-between items-center bg-white/50 hover:bg-white transition-colors focus:outline-none" onclick="toggleAccordion(this)">
+            <span class="font-heading font-bold text-brand-neutral text-left">Bagaimana penjagaan kualitas selama pengiriman?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-primary accordion-icon transition-transform duration-300 shrink-0"></i>
+          </button>
+          <div class="accordion-content bg-white/30 backdrop-blur-sm border-t border-gray-100/50">
+            <p class="px-6 pb-5 pt-4 text-brand-neutral/60 text-sm leading-relaxed">Kami menggunakan armada *cold-chain logistics* dengan kontrol suhu spesifik untuk setiap jenis sayur dan buah yang diawasi ketat oleh QA Manager kami.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item glass-card rounded-2xl overflow-hidden fade-up" style="transition-delay: 200ms;">
+          <button class="w-full px-6 py-5 flex justify-between items-center bg-white/50 hover:bg-white transition-colors focus:outline-none" onclick="toggleAccordion(this)">
+            <span class="font-heading font-bold text-brand-neutral text-left">Apa ada minimum pemesanan kontrak B2B?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-primary accordion-icon transition-transform duration-300 shrink-0"></i>
+          </button>
+          <div class="accordion-content bg-white/30 backdrop-blur-sm border-t border-gray-100/50">
+            <p class="px-6 pb-5 pt-4 text-brand-neutral/60 text-sm leading-relaxed">Minimum order (MOQ) sangat fleksibel tergantung jenis kontrak langganan. Kami melayani skala UMKM/Cafe hingga rantai jaringan Hotel Enterprise.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="py-24 relative overflow-hidden bg-brand-base">
+    <div class="container mx-auto px-6 lg:px-16 relative z-10 text-center">
+      
+      <div class="max-w-4xl mx-auto fade-up bg-gradient-to-br from-brand-primary/10 to-brand-primary/5 border border-brand-primary/20 p-10 md:p-16 rounded-[3rem] shadow-premium relative overflow-hidden">
+        <div class="absolute inset-0 bg-white/50 backdrop-blur-sm -z-10"></div>
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-brand-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-brand-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-card">
+          <i data-lucide="handshake" class="w-10 h-10 text-brand-primary"></i>
+        </div>
+        
+        <h2 class="font-heading text-4xl md:text-5xl font-extrabold text-brand-neutral leading-tight mb-6">
+          Mari Tumbuh Bersama
+        </h2>
+        
+        <p class="font-body text-lg text-brand-neutral/70 leading-relaxed mb-10 max-w-2xl mx-auto">
+          Tingkatkan efisiensi suplai bahan segar bisnis Anda dengan dukungan tim profesional UD NIMARS. Hubungi kami untuk penawaran B2B eksklusif.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <button onclick="openModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-brand-primary border border-gray-100 hover:border-brand-primary font-heading font-bold rounded-full transition-all duration-300 shadow-card hover:-translate-y-1">
+            <i data-lucide="file-text" class="w-5 h-5"></i> <span>Minta Penawaran</span>
+          </button>
+          <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 bg-brand-cta text-white hover:bg-[#D6731E] font-heading font-bold rounded-full transition-all duration-300 shadow-[0_10px_30px_rgba(230,126,34,0.3)] hover:-translate-y-1">
+            <i data-lucide="message-circle" class="w-5 h-5"></i> Chat WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-[#020617] text-white pt-24 pb-12 border-t-8 border-[#2D5A27]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-14 mb-20">
+        
+        <div class="lg:col-span-4 pr-6">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 rounded-2xl bg-[#2D5A27] flex items-center justify-center border border-white/10">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            <span class="font-display font-black text-2xl tracking-wide">UD NIMARS</span>
+          </div>
+          <p class="text-gray-400 text-base leading-relaxed mb-8">
+            Infrastruktur pasokan segar premium B2B terintegrasi tingkat tinggi. Menghubungkan potensi ladang agrikultur nusantara dengan eksekutif kuliner di seluruh Indonesia.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="#" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F2994A] hover:border-[#F2994A] transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 lg:col-start-6">
+          <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Pintas</h4>
+          <ul class="space-y-4">
+            <li><a href="about.html" class="text-gray-400 hover:text-white text-base transition-colors">Tentang Kami</a></li>
+            <li><a href="produk.html" class="text-gray-400 hover:text-white text-base transition-colors">Produk</a></li>
+            <li><a href="team.html" class="text-gray-400 hover:text-white text-base transition-colors">Tim Kami</a></li>
+            <li><a href="kontak.html" class="text-gray-400 hover:text-white text-base transition-colors">Kontak Kami</a></li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-4">
+          <h4 class="font-display font-bold mb-8 text-[#F2994A] tracking-[0.2em] text-sm uppercase">Katalog & Insight</h4>
+          <p class="text-gray-400 text-base mb-6 leading-relaxed">Dapatkan update pergerakan tren harga komoditas dan *price list* bulanan langsung ke email dashboard procurement Anda.</p>
+          <div class="flex h-14">
+            <input type="email" placeholder="Email Corporate Address" class="bg-white/5 border border-white/20 border-r-0 rounded-l-2xl px-6 w-full text-base outline-none focus:border-[#F2994A] text-white placeholder-gray-500 transition-colors">
+            <button class="bg-[#F2994A] hover:bg-orange-600 px-8 rounded-r-2xl font-bold text-base transition-colors">Subscribe</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500">
+        <p>&copy; 2026 UD NIMARS. All rights reserved.</p>
+        <div class="flex gap-8">
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors">Cookie Settings</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="quote-modal" class="fixed inset-0 bg-brand-neutral/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-4">
+    <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300" id="quote-modal-content">
+      
+      <div class="bg-brand-primary px-8 py-6 flex justify-between items-center">
+        <h3 class="font-heading text-xl font-bold text-white">Minta Penawaran</h3>
+        <button onclick="closeModal()" class="text-white/70 hover:text-white bg-white/10 rounded-full p-2">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form class="p-8" id="quote-form" onsubmit="submitForm(event)">
+        <p class="text-brand-neutral/60 text-sm mb-6">Isi detail kebutuhan pasokan, tim kami akan merespon segera.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-xs font-bold text-brand-neutral/80 uppercase tracking-wide mb-2">Nama Lengkap</label>
+            <input type="text" class="w-full bg-brand-base border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-primary transition-colors" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-neutral/80 uppercase tracking-wide mb-2">Perusahaan</label>
+            <input type="text" class="w-full bg-brand-base border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-primary transition-colors" required>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <label class="block text-xs font-bold text-brand-neutral/80 uppercase tracking-wide mb-2">Detail Kebutuhan B2B</label>
+          <textarea rows="4" class="w-full bg-brand-base border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-primary transition-colors resize-none" placeholder="Contoh: Butuh supply sayur 50kg/minggu..." required></textarea>
+        </div>
+
+        <div class="flex justify-end gap-4 border-t border-gray-100 pt-6">
+          <button type="button" onclick="closeModal()" class="px-6 py-3 rounded-full text-brand-neutral/60 font-bold hover:bg-gray-100 text-sm">Batal</button>
+          <button type="submit" class="px-8 py-3 rounded-full bg-brand-primary hover:bg-[#23471e] text-white font-bold text-sm flex items-center gap-2 transition-colors" id="submit-btn">
+            Kirim
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script>
+    // Inisialisasi Ikon Lucide
+    lucide.createIcons();
+
+    // Preloader
+    window.addEventListener('load', () => {
+      const preloader = document.getElementById('preloader');
+      preloader.style.opacity = '0';
+      setTimeout(() => { preloader.style.display = 'none'; }, 500);
+    });
+
+    // GSAP & Smooth Scroll (Lenis)
+    gsap.registerPlugin(ScrollTrigger);
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    // Progress Bar & Floating Header Scroll Effect
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('scroll-progress').style.width = ((scrolled / total) * 100) + '%';
+      
+      const header = document.getElementById('floating-header');
+      if (window.scrollY > 80) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+
+    // Animasi Fade-up Khusus Team.html
+    document.addEventListener("DOMContentLoaded", () => {
+      gsap.from(".hero-anim", {
+        y: 60, opacity: 0, duration: 1.2, stagger: 0.2, ease: "power3.out", delay: 0.5
+      });
+
+      const fadeElements = gsap.utils.toArray('.fade-up');
+      fadeElements.forEach(el => {
+        gsap.from(el, {
+          y: 40, opacity: 0, duration: 0.8, ease: "power3.out",
+          scrollTrigger: {
+            trigger: el, start: "top 85%", toggleActions: "play none none none"
+          }
+        });
+      });
+    });
+
+    // Mobile Menu Toggle (Disesuaikan dengan ID global)
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.remove('hidden'); 
+      mobileMenu.classList.add('flex');
+      gsap.fromTo(mobileMenu, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+      lenis.stop(); // Hentikan scroll saat menu terbuka
+    });
+
+    document.getElementById('close-mobile').addEventListener('click', () => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      gsap.to(mobileMenu, { opacity: 0, duration: 0.3, onComplete: () => {
+        mobileMenu.classList.add('hidden'); 
+        mobileMenu.classList.remove('flex');
+      }});
+      lenis.start(); // Jalankan kembali scroll
+    });
+
+    // Accordion
+    function toggleAccordion(btn) {
+      const item = btn.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.accordion-item').forEach(el => {
+        el.classList.remove('active');
+        el.querySelector('.accordion-content').style.maxHeight = null;
+      });
+      if (!wasActive) item.classList.add('active');
+    }
+
+    // Modal Minta Penawaran
+    const quoteModal = document.getElementById('quote-modal');
+    const quoteModalContent = document.getElementById('quote-modal-content');
+
+    function openModal() {
+      quoteModal.classList.remove('hidden');
+      setTimeout(() => {
+        quoteModal.classList.remove('opacity-0');
+        quoteModalContent.classList.remove('scale-95');
+      }, 10);
+      lenis.stop();
+    }
+
+    function closeModal() {
+      quoteModal.classList.add('opacity-0');
+      quoteModalContent.classList.add('scale-95');
+      setTimeout(() => { quoteModal.classList.add('hidden'); }, 300);
+      lenis.start();
+    }
+
+    function submitForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Mengirim...';
+      setTimeout(() => {
+        btn.innerHTML = 'Berhasil!';
+        setTimeout(() => {
+          closeModal();
+          document.getElementById('quote-form').reset();
+          btn.innerHTML = originalText;
+        }, 1500);
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
